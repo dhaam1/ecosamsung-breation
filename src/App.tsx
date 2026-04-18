@@ -94,7 +94,128 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
   );
 };
 
-// New Interactive 3D Card Component
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+
+// Register GSAP plugins if needed (Core is enough for now)
+
+// Unique GSAP-driven Visual Component for each Problem
+const GsapVisual = ({ type }: { type: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+    const ctx = gsap.context(() => {
+      if (type === "01") {
+        // Problem 01: Ad vs Reality (Greener to Greyer + X) - FASTER
+        const tl = gsap.timeline({ repeat: -1 });
+        tl.fromTo(".ad-box", 
+          { x: -80, backgroundColor: "#10b981", scale: 1 }, 
+          { x: 0, duration: 0.4, ease: "power2.out" }
+        )
+        .to(".ad-box", { 
+          x: 80, 
+          backgroundColor: "#444", 
+          duration: 0.6, 
+          ease: "expo.inOut",
+          delay: 0.3 
+        })
+        .fromTo(".fail-x", 
+          { opacity: 0, scale: 0 },
+          { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(2)" }
+        )
+        .to(".ad-box, .fail-x", { opacity: 0, duration: 0.3, delay: 0.8, y: 30 });
+      } else if (type === "02") {
+        // Problem 02: Relapsing Red Mold
+        const tl = gsap.timeline({ repeat: -1 });
+        tl.fromTo(".mold-dot", 
+          { y: 50, opacity: 0, scale: 0 },
+          { 
+            y: "random(-40, 0)", 
+            opacity: "random(0.4, 0.8)", 
+            scale: "random(1, 2)", 
+            duration: 1.5, 
+            stagger: { each: 0.1, from: "random" },
+            ease: "power2.out"
+          }
+        )
+        .to(".mold-dot", { 
+          opacity: 0, 
+          scale: 0.5, 
+          y: "-=20", 
+          duration: 1, 
+          delay: 0.5,
+          stagger: 0.05 
+        });
+      } else {
+        // Problem 03: Smelly Office (Red Vapor rising) - VERY STRONG RED
+        gsap.fromTo(".smell-wave", 
+          { y: 50, opacity: 0, scale: 0.5 },
+          {
+            y: -200,
+            opacity: 0.8,
+            scale: 2,
+            duration: "random(1, 2.5)",
+            repeat: -1,
+            ease: "power1.out",
+            stagger: {
+              each: 0.2,
+              from: "random"
+            }
+          }
+        );
+      }
+    }, containerRef);
+    return () => ctx.revert();
+  }, [type]);
+
+  return (
+    <div ref={containerRef} className="relative h-full w-full flex items-center justify-center overflow-hidden">
+      {type === "01" && (
+        <div className="relative flex items-center justify-center w-full h-full">
+           <div className="ad-box relative h-20 w-20 rounded-md shadow-2xl flex items-center justify-center">
+              <div className="fail-x absolute inset-0 flex items-center justify-center">
+                 <div className="absolute h-1 w-14 bg-red-500 rotate-45" />
+                 <div className="absolute h-1 w-14 bg-red-500 -rotate-45" />
+              </div>
+           </div>
+           {/* Visual Path */}
+           <div className="absolute w-40 h-[1px] bg-white/5 -z-10" />
+        </div>
+      )}
+      {type === "02" && (
+        <div className="relative flex flex-col items-center justify-center w-full h-full">
+           <div className="relative h-3 w-48 bg-white/10 rounded-full mb-4 overflow-hidden">
+              <div className="absolute inset-0 bg-brand/20" />
+           </div>
+           <div className="relative flex flex-wrap justify-center gap-4 w-40 h-20">
+             {[...Array(12)].map((_, i) => (
+               <div key={i} className="mold-dot h-3 w-3 rounded-full bg-red-500" />
+             ))}
+           </div>
+        </div>
+      )}
+      {type === "03" && (
+        <div className="relative w-full h-full flex flex-col items-center justify-end pb-10">
+           {/* Office Silhouette */}
+           <div className="relative w-48 h-32 border-b-2 border-white/10 flex items-end justify-center gap-4">
+              <div className="w-16 h-12 bg-white/5 border border-white/10 rounded-t-sm" />
+              <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-t-sm" />
+              <div className="w-14 h-16 bg-white/5 border border-white/10 rounded-t-sm" />
+           </div>
+           {/* Smell Waves - RED */}
+           <div className="absolute inset-x-0 bottom-5 flex justify-center gap-2">
+             {[...Array(10)].map((_, i) => (
+               <div key={i} className="smell-wave w-12 h-32 bg-red-500/50 blur-3xl rounded-full" />
+             ))}
+           </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// New Reconstructed Interactive 3D Card Component (Universal GSAP version)
 const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPreview?: boolean }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -131,57 +252,37 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
         rotateY: isPreview ? 0 : rotateY,
         transformStyle: "preserve-3d",
       }}
-      className={`group relative h-full w-full overflow-hidden rounded-[4px] bg-[#1a1a1a] border border-white/5 p-6 lg:p-8 transition-all hover:bg-[#222] ${isPreview ? "opacity-60 grayscale-[0.5]" : ""}`}
+      className={`group relative h-full w-full overflow-hidden rounded-[16px] bg-[#0d0d0d] border border-white/5 p-6 lg:p-10 transition-all hover:bg-[#111] ${isPreview ? "opacity-30 grayscale blur-[2px]" : ""}`}
     >
       <div 
-        style={{ transform: "translateZ(50px)" }}
-        className="relative mb-8 lg:mb-12 flex h-[50%] lg:h-[60%] items-center justify-center overflow-hidden rounded-[2px]"
+        style={{ transform: "translateZ(60px)" }}
+        className="relative mb-6 lg:mb-8 h-[220px] lg:h-[260px] w-full flex items-center justify-center rounded-[8px] bg-black/40 border border-white/5 overflow-hidden"
       >
-        <motion.div 
-          animate={{ 
-            y: [0, -15, 0],
-            rotateZ: [0, 2, 0, -2, 0]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="h-full w-full flex items-center justify-center scale-[1.2] group-hover:scale-[1.4] transition-transform duration-700 ease-out"
-        >
-          <DotLottieReact
-            src={item.lottieUrl}
-            loop
-            autoplay
-            className="h-full w-full"
-            style={{ filter: "drop-shadow(0 20px 40px rgba(77, 120, 224, 0.2))" }}
-          />
-        </motion.div>
-        <div 
-          style={{ transform: "translateZ(80px)" }}
-          className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10"
-        >
-          {item.icon}
-        </div>
-        {/* Glass Glare Effect */}
-        <motion.div
-            className="absolute inset-0 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-            style={{
-                background: `radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.08) 0%, transparent 80%)`,
-            }}
-        />
+        <GsapVisual type={item.id} />
       </div>
 
-      <div style={{ transform: "translateZ(30px)" }} className="mt-auto">
-        <h3 className="text-[18px] lg:text-[22px] font-bold text-white/90 group-hover:text-brand transition-colors">
+      <div style={{ transform: "translateZ(40px)" }} className="mt-auto relative z-10">
+        <div className="flex items-center gap-4 mb-4">
+           <span className="text-[11px] font-bold text-brand tracking-[0.4em] uppercase">Issue 0{item.id}</span>
+           <div className="h-[1px] w-10 bg-brand/20" />
+        </div>
+        <h3 className="text-[20px] lg:text-[24px] font-bold text-white group-hover:text-brand transition-colors leading-tight">
           {item.text}
         </h3>
         {!isPreview && (
-          <p className="mt-3 lg:mt-4 text-[14px] lg:text-[16px] leading-relaxed text-white/60 group-hover:text-white/80 transition-colors line-clamp-3 lg:line-clamp-none">
+          <p className="mt-4 lg:mt-6 text-[15px] lg:text-[17px] leading-relaxed text-white/40 group-hover:text-white/70 transition-colors whitespace-pre-line">
             {item.desc}
           </p>
         )}
       </div>
+
+      {/* GSAP Flare Interaction */}
+      <motion.div
+          className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+              background: `radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(77,120,224,0.1) 0%, transparent 70%)`,
+          }}
+      />
     </motion.div>
   );
 };
@@ -205,24 +306,24 @@ export default function App() {
   const problems = [
     {
       id: "01",
-      icon: <AlertCircle className="h-6 w-6 text-brand" />,
+      icon: <AlertCircle className="h-6 w-6" />,
       text: "광고한 거랑 청소 상태가 너무 달라요",
       desc: "의뢰를 받은 것은 다시 하청으로 내리는 고객과의 '신뢰'를 저버리는 하도급 중심 구조. 청소 품질 편차가 일정할 수 밖에 없습니다.",
-      lottieUrl: "https://lottie.host/804135e6-6c1e-450b-8012-42173f4e1f74/E0Z9J5Y6N8.json"
+      image: problemSubcontracting
     },
     {
       id: "02",
-      icon: <Search className="h-6 w-6 text-brand" />,
+      icon: <Search className="h-6 w-6" />,
       text: "청소해도 며칠 지나면 다시 더러워져요",
       desc: "표면만 닦아내는 청소는 한계가 있습니다. 오염의 근본적인 원인을 해결하지 않으면 오염은 반드시 재발합니다.",
-      lottieUrl: "https://lottie.host/6ad69c70-2a26-4a42-99dc-7eb481358c56/Y5U4h7vQ1W.json"
+      image: problemSurface
     },
     {
       id: "03",
-      icon: <Wind className="h-6 w-6 text-brand" />,
+      icon: <Wind className="h-6 w-6" />,
       text: "업체 이용 후에도 냄새는 똑같이 나는 것 같아요",
       desc: "냄새는 보이지 않는 틈새와 깊숙한 곳에 박힌 오염원에서 시작됩니다. 그저 겉만 청소하는 것은 아무 소용 없습니다.",
-      lottieUrl: "https://lottie.host/bb6a4406-03c0-4f51-8e5e-636c7a6e60b1/PzS8xU4k7L.json"
+      image: problemMold
     }
   ];
 
@@ -381,6 +482,16 @@ export default function App() {
     if (containerRef.current) {
       containerRef.current.scrollTo(0, 0);
     }
+    
+    // Update document title based on view
+    const baseTitle = "에코삼성 | 프리미엄 특수 세정 솔루션";
+    if (view === 'privacy') {
+      document.title = `개인정보 처리방침 | ${baseTitle}`;
+    } else if (view === 'terms') {
+      document.title = `서비스 이용약관 | ${baseTitle}`;
+    } else {
+      document.title = baseTitle;
+    }
   }, [view]);
 
   return (
@@ -400,7 +511,13 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-col leading-none cursor-pointer"
-            onClick={() => setView('home')}
+            onClick={() => {
+              if (view === 'home') {
+                containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                setView('home');
+              }
+            }}
           >
             <span className="text-[18px] lg:text-[22px] font-black tracking-[0.2em] text-white">ECO</span>
             <span className="text-[11px] lg:text-[14px] font-light tracking-[0.4em] text-white/80">SAMSUNG</span>
@@ -511,7 +628,6 @@ const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
             원인마저 제거하려면 <span className="text-brand">에코삼성</span>입니다.
           </h1>
           <p className="mt-[20px] lg:mt-[28px] max-w-[600px] text-[15px] md:text-[18px] lg:text-[20px] font-semibold text-white/90 drop-shadow-md leading-relaxed">
-            보이지 않는 오염의 근본 원인을 찾아 해결하는<br />
             프리미엄 특수 세정 솔루션. 에코삼성입니다.
           </p>
         </motion.div>
@@ -738,7 +854,7 @@ const SubPageLayout = ({ title, children, setView }: { title: string, children: 
         className="flex items-center gap-2 text-[13px] font-bold text-white/40 hover:text-brand transition-colors mb-12 group"
       >
         <div className="w-5 h-[1px] bg-white/20 group-hover:bg-brand transition-colors" />
-        <span>BACK TO HOME</span>
+        <span className="tracking-[0.2em]">BACK TO HOME</span>
       </motion.button>
       
       <motion.div
@@ -746,8 +862,12 @@ const SubPageLayout = ({ title, children, setView }: { title: string, children: 
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
       >
+        <div className="flex items-center gap-4 mb-8">
+           <div className="h-[2px] w-12 bg-brand/50" />
+           <span className="text-[12px] font-bold text-brand tracking-[0.4em] uppercase">Document</span>
+        </div>
         <h1 className="text-[42px] lg:text-[64px] font-bold tracking-tight text-white mb-16">{title}</h1>
-        <div className="space-y-12 text-[15px] lg:text-[17px] leading-[1.8] text-white/60 font-medium">
+        <div className="space-y-12 text-[15px] lg:text-[17px] leading-[1.9] text-white/60 font-medium">
           {children}
         </div>
       </motion.div>
@@ -755,69 +875,119 @@ const SubPageLayout = ({ title, children, setView }: { title: string, children: 
   </section>
 );
 
-const PrivacyPolicyView = () => (
-  <SubPageLayout title="Privacy Policy" setView={() => {}}>
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">1. 개인정보의 수집 및 이용 목적</h2>
-      <p>에코삼성은 고객님의 문의에 대한 답변 및 서비스 제공을 위해 최소한의 개인정보를 수집하고 있습니다. 수집된 정보는 상담 신청 내역 확인, 서비스 견적 제공, 계약 이행 및 고객 관리를 위한 용도로만 사용됩니다.</p>
-    </div>
-    
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">2. 수집하는 개인정보 항목</h2>
-      <ul className="list-disc pl-5 space-y-2">
-        <li>필수항목: 성함, 연락처, 서비스 대상 지역</li>
-        <li>선택항목: 서비스 유형(입주, 이사, 특수세정 등), 상세 문의 내용</li>
+const PrivacyPolicyView = ({ setView }: { setView: (v: 'home') => void }) => (
+  <SubPageLayout title="Privacy Policy" setView={setView}>
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">01.</span>
+        개인정보의 수집 및 이용 목적
+      </h2>
+      <p>에코삼성은 이용자의 문의사항에 대한 정확한 답변 및 서비스 제공을 위해 최소한의 필요한 개인정보를 수집하고 있습니다. 수집된 정보는 다음의 목적 이외의 용도로는 사용되지 않으며, 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.</p>
+      <ul className="mt-4 list-none space-y-2 opacity-80">
+        <li className="flex gap-2"><span className="text-brand">•</span> 서비스 상담 및 견적 제공을 위한 본인 확인</li>
+        <li className="flex gap-2"><span className="text-brand">•</span> 계약 체결, 서비스 이행 및 대금 결제</li>
+        <li className="flex gap-2"><span className="text-brand">•</span> 사후 관리(A/S) 및 고객 만족도 조사</li>
       </ul>
-    </div>
+    </section>
+    
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">02.</span>
+        수집하는 개인정보 항목
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
+          <h3 className="text-white font-bold mb-2">필수 항목</h3>
+          <p className="text-[14px]">성함(또는 업체명), 연락처, 서비스 대상 지역</p>
+        </div>
+        <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
+          <h3 className="text-white font-bold mb-2">선택 항목</h3>
+          <p className="text-[14px]">이메일, 상세 문의 내용, 서비스 희망 일자</p>
+        </div>
+      </div>
+    </section>
 
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">3. 개인정보의 보유 및 이용 기간</h2>
-      <p>이용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용 목적이 달성되면 지체 없이 파기합니다. 단, 상담 완료 후 사후 관리 및 분쟁 해결을 위해 필요한 경우 최대 1년간 보관할 수 있으며, 관계 법령에 따라 보존이 필요한 경우에는 해당 기간 동안 보관합니다.</p>
-    </div>
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">03.</span>
+        개인정보의 보유 및 이용 기간
+      </h2>
+      <p>이용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용 목적이 달성되면 지체 없이 파기합니다. 단, 관계 법령(상법, 전자상거래법 등)에 의하여 보존할 필요가 있는 경우 해당 법령에서 정한 일정 기간 동안 보관합니다.</p>
+      <p className="mt-4 text-white/40 text-[14px] italic">* 상담용 정보: 상담 완료 후 최대 1년 (사후 관리 목적)</p>
+    </section>
 
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">4. 개인정보의 제3자 제공</h2>
-      <p>에코삼성은 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다. 단, 이용자가 사전에 동의한 경우나 법률의 규정에 의한 경우에는 예외로 합니다.</p>
-    </div>
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">04.</span>
+        개인정보의 파기 절차 및 방법
+      </h2>
+      <p>에코삼성은 목적이 달성된 개인정보를 지체 없이 파기합니다. 전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법을 사용하며, 종이 문서에 출력된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.</p>
+    </section>
 
-    <div className="pt-12 border-t border-white/10">
-      <p className="text-[14px] text-white/30 italic">시행일자: 2024년 4월 1일</p>
+    <div className="pt-12 border-t border-white/10 flex justify-between items-center text-[14px] text-white/30">
+      <p>시행일자: 2024년 4월 1일</p>
+      <p>© ECO SAMSUNG</p>
     </div>
   </SubPageLayout>
 );
 
-const TermsOfServiceView = () => (
-  <SubPageLayout title="Terms of Service" setView={() => {}}>
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">제1조 (목적)</h2>
-      <p>본 약관은 에코삼성(이하 "회사")이 제공하는 청소 서비스 및 관련 제반 서비스의 이용 조건 및 절차, 회사와 이용자의 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.</p>
-    </div>
+const TermsOfServiceView = ({ setView }: { setView: (v: 'home') => void }) => (
+  <SubPageLayout title="Terms of Service" setView={setView}>
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">01.</span>
+        목적
+      </h2>
+      <p>본 약관은 에코삼성(이하 "회사")이 제공하는 청소 서비스 및 관련 제반 서비스(이하 "서비스")를 이용함에 있어 회사와 이용자 간의 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.</p>
+    </section>
 
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">제2조 (서비스의 내용)</h2>
-      <p>회사는 이용자에게 다음과 같은 서비스를 제공합니다:<br />
-      1. 주거 및 상업 공간 입주/이사 청소 서비스<br />
-      2. 외벽, 대리석 등 특수 세정 및 시설 관리 서비스<br />
-      3. 정기 관리 및 위생 컨설팅 서비스</p>
-    </div>
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">02.</span>
+        서비스의 정의 및 제공
+      </h2>
+      <p>회사는 이용자에게 다음과 같은 프리미엄 세정 솔루션을 제공합니다.</p>
+      <div className="mt-6 space-y-4">
+        {[
+          { t: "주거 및 상업 공간 입주/이사 청소", d: "신축 또는 이전 공간의 정밀 위생 복원" },
+          { t: "특수 세정 및 시설 관리", d: "외벽, 대리석, 카페트 등 재질별 맞춤 세정" },
+          { t: "정기 관리 및 컨설팅", d: "공공기관 및 사업장의 지속적인 위생 유지 관리" }
+        ].map((item, i) => (
+          <div key={i} className="flex items-start gap-4 p-5 bg-white/5 rounded-xl border border-white/5">
+            <span className="text-brand font-bold">0{i+1}</span>
+            <div>
+              <p className="text-white font-bold">{item.t}</p>
+              <p className="text-[14px] opacity-60">{item.d}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
 
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">제3조 (예약 및 결제)</h2>
-      <p>모든 서비스는 상담을 통한 견적 확인 후 확정됩니다. 예약 시 별도의 예약금이 발생할 수 있으며, 서비스 완료 후 최종 결제가 이루어집니다.</p>
-    </div>
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">03.</span>
+        계약의 성립 및 결제
+      </h2>
+      <p>서비스 계약은 상담 후 발송된 견적서에 대하여 이용자가 동의하거나 예약금을 입금함으로써 성립됩니다. 결제 방식은 선급금과 잔금으로 구분될 수 있으며, 모든 비용은 협의된 공식 계좌 또는 결제 수단을 통해 처리됩니다.</p>
+    </section>
 
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">제4조 (취소 및 환불)</h2>
-      <p>서비스 일자로부터 3일 이내에 예약을 취소할 경우 별도의 위약금이 발생할 수 있습니다. 이미 투입된 인력이나 장비가 있는 경우 해당 비용을 차감 후 환불이 진행됩니다.</p>
-    </div>
+    <section>
+      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/30 font-mono text-[14px]">04.</span>
+        책임 범위 및 보상 기준
+      </h2>
+      <p>회사는 서비스 수행 중 회사의 고의 또는 과실로 인한 물적 피해가 발생한 경우 신속한 복구 및 배상을 원칙으로 합니다. 다만, 다음의 경우 책임이 제한될 수 있습니다.</p>
+      <ul className="mt-4 list-disc pl-5 space-y-2 opacity-80 decoration-brand">
+        <li>이용자가 사전에 고지하지 않은 특수 재질이나 노후화된 시설물</li>
+        <li>시공 후 이용자의 부주의로 인해 발생한 오염 또는 파손</li>
+        <li>천재지변 등 불가항력적인 상황으로 인한 서비스 지연</li>
+      </ul>
+    </section>
 
-    <div>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 underline underline-offset-8 decoration-brand/30">제5조 (책임 및 보상)</h2>
-      <p>회사는 서비스 도중 회사의 과실로 발생한 물적 피해에 대하여 배상 책임을 집니다. 단, 이용자가 시공 전 고지하지 않은 특수 상황이나 노후화로 인한 파손의 경우 책임이 제한될 수 있습니다.</p>
-    </div>
-
-    <div className="pt-12 border-t border-white/10">
-      <p className="text-[14px] text-white/30 italic">시행일자: 2024년 4월 1일</p>
+    <div className="pt-12 border-t border-white/10 flex justify-between items-center text-[14px] text-white/30">
+      <p>시행일자: 2024년 4월 1일</p>
+      <p>© ECO SAMSUNG</p>
     </div>
   </SubPageLayout>
 );
@@ -1241,7 +1411,9 @@ const Footer = ({
                 <span className="text-[12px] lg:text-[14px] font-light tracking-[0.4em] text-white/40">SAMSUNG</span>
               </div>
               <p className="text-[14px] lg:text-[16px] text-white/40 leading-relaxed font-medium">
-                에코삼성은 단순한 청소를 넘어 공간의 본질을 회복합니다. 프리미엄 특수 세정 솔루션으로 당신의 공간에 새로운 가치를 더합니다.
+                겉만 청소하면 다시 더러워집니다.<br />
+                원인마저 제거하려면 에코삼성입니다.<br />
+                프리미엄 특수 세정 솔루션. 에코삼성입니다.
               </p>
               <div className="flex gap-4">
                 {socialLinks.map((s, i) => (
