@@ -582,7 +582,7 @@ export default function App() {
         onPhoneClick={handlePhoneClick}
         setView={setView}
       />
-      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} setView={setView} />
       <PhoneModal isOpen={isPhoneModalOpen} onClose={() => setIsPhoneModalOpen(false)} />
       <div className="pointer-events-none fixed inset-0 z-50 opacity-[0.03] mix-blend-overlay">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -846,30 +846,45 @@ const CtaSection = ({ onOpenModal }: any) => (
 
 const SubPageLayout = ({ title, children, setView }: { title: string, children: React.ReactNode, setView: (v: 'home') => void }) => (
   <section className="relative min-h-screen w-full bg-[#050505] pt-[150px] pb-[15vh] px-[5vw]">
-    <div className="mx-auto max-w-[900px]">
+    <div className="mx-auto max-w-[1000px]">
       <motion.button 
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={() => setView('home')}
-        className="flex items-center gap-2 text-[13px] font-bold text-white/40 hover:text-brand transition-colors mb-12 group"
+        className="flex items-center gap-3 text-[12px] font-bold text-white/40 hover:text-brand transition-all mb-16 group"
       >
-        <div className="w-5 h-[1px] bg-white/20 group-hover:bg-brand transition-colors" />
-        <span className="tracking-[0.2em]">BACK TO HOME</span>
+        <div className="w-8 h-[1px] bg-white/10 group-hover:w-12 group-hover:bg-brand transition-all duration-500" />
+        <span className="tracking-[0.3em] uppercase">Return to Main</span>
       </motion.button>
       
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+        transition={{ duration: 1, ease: [0.165, 0.84, 0.44, 1] }}
       >
-        <div className="flex items-center gap-4 mb-8">
-           <div className="h-[2px] w-12 bg-brand/50" />
-           <span className="text-[12px] font-bold text-brand tracking-[0.4em] uppercase">Document</span>
-        </div>
-        <h1 className="text-[42px] lg:text-[64px] font-bold tracking-tight text-white mb-16">{title}</h1>
-        <div className="space-y-12 text-[15px] lg:text-[17px] leading-[1.9] text-white/60 font-medium">
+        <header className="mb-20">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="h-[1px] w-12 bg-brand/30" />
+            <span className="text-[11px] font-bold text-brand tracking-[0.5em] uppercase">Legal Document</span>
+          </div>
+          <h1 className="text-[48px] lg:text-[80px] font-bold tracking-tight text-white mb-6 leading-[1.1]">{title}</h1>
+          <p className="text-white/30 text-[14px] lg:text-[16px] font-medium tracking-wide">Last updated: April 18, 2024</p>
+        </header>
+
+        <div className="space-y-16 text-[15px] lg:text-[17px] leading-[2] text-white/60 font-medium">
           {children}
         </div>
+        
+        <footer className="mt-32 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[13px] text-white/20">
+          <p>© ECO SAMSUNG. ALL RIGHTS RESERVED.</p>
+          <motion.button 
+            whileHover={{ scale: 1.05, color: '#4D78E0' }}
+            onClick={() => setView('home')}
+            className="font-bold tracking-widest uppercase"
+          >
+            Back to top
+          </motion.button>
+        </footer>
       </motion.div>
     </div>
   </section>
@@ -878,55 +893,110 @@ const SubPageLayout = ({ title, children, setView }: { title: string, children: 
 const PrivacyPolicyView = ({ setView }: { setView: (v: 'home') => void }) => (
   <SubPageLayout title="Privacy Policy" setView={setView}>
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">01.</span>
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">01.</span>
         개인정보의 수집 및 이용 목적
       </h2>
-      <p>에코삼성은 이용자의 문의사항에 대한 정확한 답변 및 서비스 제공을 위해 최소한의 필요한 개인정보를 수집하고 있습니다. 수집된 정보는 다음의 목적 이외의 용도로는 사용되지 않으며, 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.</p>
-      <ul className="mt-4 list-none space-y-2 opacity-80">
-        <li className="flex gap-2"><span className="text-brand">•</span> 서비스 상담 및 견적 제공을 위한 본인 확인</li>
-        <li className="flex gap-2"><span className="text-brand">•</span> 계약 체결, 서비스 이행 및 대금 결제</li>
-        <li className="flex gap-2"><span className="text-brand">•</span> 사후 관리(A/S) 및 고객 만족도 조사</li>
-      </ul>
+      <p>에코삼성(이하 "회사")은 이용자의 문의사항에 대한 정확한 답변 및 최적의 서비스 제공을 위해 최소한의 필수 개인정보를 수집하고 있습니다. 수집된 정보는 다음의 목적 이외의 용도로는 절대 사용되지 않습니다.</p>
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { title: "본인 확인", text: "서비스 상담 및 견적 제공을 위한 의뢰인 식별" },
+          { title: "서비스 이행", text: "원활한 청소 시공 및 계약 조건의 충실한 이행" },
+          { title: "고객 관리", text: "사후 관리(A/S) 및 서비스 만족도 조사, 분쟁 해결" }
+        ].map((item, i) => (
+          <div key={i} className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+            <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-brand" />
+              {item.title}
+            </h3>
+            <p className="text-[14px] leading-relaxed opacity-70">{item.text}</p>
+          </div>
+        ))}
+      </div>
     </section>
     
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">02.</span>
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">02.</span>
         수집하는 개인정보 항목
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-          <h3 className="text-white font-bold mb-2">필수 항목</h3>
-          <p className="text-[14px]">성함(또는 업체명), 연락처, 서비스 대상 지역</p>
+      <p className="mb-6">회사는 서비스 이용을 위해 다음과 같은 정보를 필수적 또는 선택적으로 수집합니다.</p>
+      <div className="space-y-4">
+        <div className="p-6 bg-white/[0.02] rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-white font-bold mb-1">인적 사항 (필수)</h3>
+            <p className="text-[14px] opacity-50">상담 및 본인 확인을 위한 최소 세부 정보</p>
+          </div>
+          <p className="text-[16px] text-brand/80 font-semibold italic">성함(또는 업체명), 연락처, 서비스 대상 지역</p>
         </div>
-        <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-          <h3 className="text-white font-bold mb-2">선택 항목</h3>
-          <p className="text-[14px]">이메일, 상세 문의 내용, 서비스 희망 일자</p>
+        <div className="p-6 bg-white/[0.02] rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-white font-bold mb-1">부가 정보 (선택)</h3>
+            <p className="text-[14px] opacity-50">수준 높은 맞춤형 솔루션 제공을 위한 정보</p>
+          </div>
+          <p className="text-[16px] text-white/80 font-semibold italic">이메일, 상세 요청 내역, 시공 희망 일시</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">03.</span>
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">03.</span>
         개인정보의 보유 및 이용 기간
       </h2>
-      <p>이용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용 목적이 달성되면 지체 없이 파기합니다. 단, 관계 법령(상법, 전자상거래법 등)에 의하여 보존할 필요가 있는 경우 해당 법령에서 정한 일정 기간 동안 보관합니다.</p>
-      <p className="mt-4 text-white/40 text-[14px] italic">* 상담용 정보: 상담 완료 후 최대 1년 (사후 관리 목적)</p>
+      <p>회사는 원칙적으로 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 관계법령의 규정에 의하여 보존할 필요가 있는 경우 아래와 같이 일정 기간 보관합니다.</p>
+      <div className="mt-8 border-l-2 border-brand/20 pl-8 space-y-6">
+        <div>
+          <h3 className="text-white/80 font-bold mb-2">상담 관련 기록</h3>
+          <p className="text-[14px] opacity-60">보존 사유: 소비자 상담 및 사후 관리 / 보존 기간: 1년</p>
+        </div>
+        <div>
+          <h3 className="text-white/80 font-bold mb-2">계약 또는 청약철회 등에 관한 기록</h3>
+          <p className="text-[14px] opacity-60">보존 사유: 전자상거래법 / 보존 기간: 5년</p>
+        </div>
+        <div>
+          <h3 className="text-white/80 font-bold mb-2">대금결제 및 재화 등의 공급에 관한 기록</h3>
+          <p className="text-[14px] opacity-60">보존 사유: 전자상거래법 / 보존 기간: 5년</p>
+        </div>
+      </div>
     </section>
 
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">04.</span>
-        개인정보의 파기 절차 및 방법
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">04.</span>
+        개인정보의 파기절차 및 방법
       </h2>
-      <p>에코삼성은 목적이 달성된 개인정보를 지체 없이 파기합니다. 전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법을 사용하며, 종이 문서에 출력된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.</p>
+      <p>회사는 개인정보 파기 시 재생이 불가능한 방법으로 안전하게 파기합니다.</p>
+      <ul className="mt-6 list-none space-y-4">
+        <li className="flex gap-4 p-5 bg-white/[0.01] border border-white/5 rounded-xl">
+          <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center text-brand shrink-0">
+            <span className="font-bold text-[14px]">P1</span>
+          </div>
+          <p className="text-[14.5px] leading-relaxed"><strong className="text-white">절차:</strong> 목적이 달성된 후 별도의 DB로 옮겨져 관련 법령에 따라 일정 기간 저장된 후 즉시 파기됩니다.</p>
+        </li>
+        <li className="flex gap-4 p-5 bg-white/[0.01] border border-white/5 rounded-xl">
+          <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center text-brand shrink-0">
+            <span className="font-bold text-[14px]">P2</span>
+          </div>
+          <p className="text-[14.5px] leading-relaxed"><strong className="text-white">방법:</strong> 전자적 파일은 기록을 재생할 수 없는 기술적 방법을 사용하며, 종이 문서는 분쇄하거나 소각합니다.</p>
+        </li>
+      </ul>
     </section>
 
-    <div className="pt-12 border-t border-white/10 flex justify-between items-center text-[14px] text-white/30">
-      <p>시행일자: 2024년 4월 1일</p>
-      <p>© ECO SAMSUNG</p>
+    <section>
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">05.</span>
+        정보주체의 권리와 그 행사방법
+      </h2>
+      <p>이용자는 언제든지 등록되어 있는 자신의 개인정보를 조회하거나 수정할 수 있으며 수집/이용 동의 철회를 요청할 수 있습니다. 개인정보 보호책임자에게 서면, 전화 또는 이메일로 연락하시면 지체 없이 조치하겠습니다.</p>
+    </section>
+
+    <div className="p-10 bg-brand/5 border border-brand/20 rounded-[32px] mt-20">
+      <h3 className="text-brand font-bold mb-6 tracking-widest uppercase text-[12px]">Contact Point</h3>
+      <p className="text-white text-[18px] lg:text-[22px] font-bold mb-2">개인정보 보호 전담 부서</p>
+      <p className="text-white/60 mb-8">에코삼성 운영 지원팀 (010-6273-7511)</p>
+      <div className="h-[1px] w-full bg-brand/10 mb-8" />
+      <p className="text-[14px] opacity-40">이용자는 회사의 서비스를 이용하시며 발생하는 모든 개인정보보호 관련 민원을 개인정보보호책임자 혹은 담당부서로 신고하실 수 있습니다.</p>
     </div>
   </SubPageLayout>
 );
@@ -934,30 +1004,40 @@ const PrivacyPolicyView = ({ setView }: { setView: (v: 'home') => void }) => (
 const TermsOfServiceView = ({ setView }: { setView: (v: 'home') => void }) => (
   <SubPageLayout title="Terms of Service" setView={setView}>
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">01.</span>
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">01.</span>
         목적
       </h2>
-      <p>본 약관은 에코삼성(이하 "회사")이 제공하는 청소 서비스 및 관련 제반 서비스(이하 "서비스")를 이용함에 있어 회사와 이용자 간의 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.</p>
+      <p>본 약관은 에코삼성(이하 "회사")이 제공하는 프리미엄 특수 청소 및 유지 관리 서비스(이하 "서비스")를 이용함에 있어 회사와 이용자 간의 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.</p>
     </section>
 
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">02.</span>
-        서비스의 정의 및 제공
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">02.</span>
+        약관의 효력 및 변경
       </h2>
-      <p>회사는 이용자에게 다음과 같은 프리미엄 세정 솔루션을 제공합니다.</p>
-      <div className="mt-6 space-y-4">
+      <p>본 약관은 서비스 신청 시 이용자가 동의함으로써 효력이 발생합니다. 회사는 합리적인 사유가 발생할 경우 관련 법령을 위배하지 않는 범위 내에서 약관을 개정할 수 있으며, 변경된 약관은 웹사이트 공지 혹은 개별 알림을 통해 공시합니다.</p>
+    </section>
+
+    <section>
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">03.</span>
+        서비스 범위 및 전문가 배치
+      </h2>
+      <p>회사는 이용자에게 다음과 같은 전문 세정 솔루션을 제공합니다.</p>
+      <div className="mt-8 space-y-4">
         {[
-          { t: "주거 및 상업 공간 입주/이사 청소", d: "신축 또는 이전 공간의 정밀 위생 복원" },
-          { t: "특수 세정 및 시설 관리", d: "외벽, 대리석, 카페트 등 재질별 맞춤 세정" },
-          { t: "정기 관리 및 컨설팅", d: "공공기관 및 사업장의 지속적인 위생 유지 관리" }
+          { t: "특수 시공 시스템", d: "외벽, 대리석, 카페트 등 고난도 기술이 필요한 전문 특수 시공 서비스" },
+          { t: "100% 직영 운영", d: "하도급 없는 투명한 시공을 위해 전 인원 본사 직영 전문가 투입" },
+          { t: "맞춤형 위생 솔루션", d: "오염 원인 분석을 통한 근본적 청소 및 친환경 특수 약품 처리" }
         ].map((item, i) => (
-          <div key={i} className="flex items-start gap-4 p-5 bg-white/5 rounded-xl border border-white/5">
-            <span className="text-brand font-bold">0{i+1}</span>
+          <div key={i} className="flex items-start gap-6 p-6 bg-white/[0.02] rounded-[20px] border border-white/5 group hover:bg-white/[0.04] transition-all">
+            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
+               <span className="text-brand font-black text-[18px]">0{i+1}</span>
+            </div>
             <div>
-              <p className="text-white font-bold">{item.t}</p>
-              <p className="text-[14px] opacity-60">{item.d}</p>
+              <p className="text-white text-[18px] font-bold mb-1">{item.t}</p>
+              <p className="text-[14.5px] opacity-60 leading-relaxed font-medium">{item.d}</p>
             </div>
           </div>
         ))}
@@ -965,40 +1045,42 @@ const TermsOfServiceView = ({ setView }: { setView: (v: 'home') => void }) => (
     </section>
 
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">03.</span>
-        계약의 성립 및 결제
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">04.</span>
+        계약의 성립 및 결제 조건
       </h2>
-      <p>서비스 계약은 상담 후 발송된 견적서에 대하여 이용자가 동의하거나 예약금을 입금함으로써 성립됩니다. 결제 방식은 선급금과 잔금으로 구분될 수 있으며, 모든 비용은 협의된 공식 계좌 또는 결제 수단을 통해 처리됩니다.</p>
+      <p>1. 서비스 계약은 이용자의 상담 신청 후, 회사가 제공한 견적에 대하여 이용자가 확정 의사를 밝히거나 예약금을 입금함과 동시에 성립됩니다.</p>
+      <p className="mt-4">2. 결제는 현금, 계좌이체, 신용카드 등 회사와 협의된 수단을 통해 가능하며, 별도의 계약이 없는 경우 시공 완료 직후 잔금을 정산하는 것을 원칙으로 합니다.</p>
     </section>
 
     <section>
-      <h2 className="text-[20px] lg:text-[24px] font-bold text-white mb-6 flex items-center gap-4">
-        <span className="text-brand/30 font-mono text-[14px]">04.</span>
-        책임 범위 및 보상 기준
+      <h2 className="text-[22px] lg:text-[26px] font-bold text-white mb-6 flex items-center gap-4">
+        <span className="text-brand/40 font-mono text-[16px]">05.</span>
+        회사의 의무와 책임 한계
       </h2>
-      <p>회사는 서비스 수행 중 회사의 고의 또는 과실로 인한 물적 피해가 발생한 경우 신속한 복구 및 배상을 원칙으로 합니다. 다만, 다음의 경우 책임이 제한될 수 있습니다.</p>
-      <ul className="mt-4 list-disc pl-5 space-y-2 opacity-80 decoration-brand">
-        <li>이용자가 사전에 고지하지 않은 특수 재질이나 노후화된 시설물</li>
-        <li>시공 후 이용자의 부주의로 인해 발생한 오염 또는 파손</li>
-        <li>천재지변 등 불가항력적인 상황으로 인한 서비스 지연</li>
-      </ul>
+      <p>1. 회사는 계약된 일시에 최상의 장비와 전문 인력을 투입하여 성실히 서비스를 수행할 의무가 있습니다.</p>
+      <p className="mt-4">2. 시공 중 발생하는 회사의 과실에 의한 파손에 대해서는 즉각적인 보수 또는 보험 처리를 원칙으로 합니다.</p>
+      <p className="mt-4">3. 단, 제품의 노후화, 시공 전 미고지된 특이사항, 천재지변 등으로 인한 불가항력적 피해에 대해서는 책임이 제한될 수 있습니다.</p>
     </section>
 
-    <div className="pt-12 border-t border-white/10 flex justify-between items-center text-[14px] text-white/30">
-      <p>시행일자: 2024년 4월 1일</p>
-      <p>© ECO SAMSUNG</p>
+    <div className="mt-24 p-8 border border-white/5 rounded-2xl bg-white/[0.01] flex items-center justify-between">
+      <div className="flex items-center gap-4 text-white/40">
+        <AlertCircle className="w-5 h-5 text-brand" />
+        <p className="text-[13.5px] font-medium leading-relaxed">본 약관에 명시되지 않은 사항은 관계 법령 및 상관례에 따릅니다.</p>
+      </div>
     </div>
   </SubPageLayout>
 );
 
-const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: () => void, setView: (v: 'privacy' | 'terms') => void }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
-  // Reset submit state when modal opens
+  // Reset states when modal opens
   useEffect(() => {
     if (isOpen) {
       setIsSubmitted(false);
+      setAgreed(false);
     }
   }, [isOpen]);
 
@@ -1025,6 +1107,15 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!agreed) {
+      alert("개인정보 수집 및 이용에 동의해주세요.");
+      return;
+    }
+    setIsSubmitted(true);
   };
 
   return (
@@ -1076,7 +1167,7 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
             </div>
 
             {/* Right Side Contents */}
-            <div className="flex-1 p-10 lg:p-14 relative min-h-[500px] flex flex-col justify-center">
+            <div className="flex-1 p-10 lg:p-14 relative min-h-[550px] flex flex-col justify-center">
               <AnimatePresence mode="wait">
                 {!isSubmitted ? (
                   <motion.div
@@ -1086,21 +1177,21 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                   >
-                    <div className="mb-10">
+                    <div className="mb-8">
                       <motion.span variants={itemVariants} className="text-[12px] font-bold uppercase tracking-[0.4em] text-white/60">Inquiry</motion.span>
                       <motion.h2 variants={itemVariants} className="mt-4 text-[36px] font-bold tracking-tight">무료 견적 상담</motion.h2>
                       <motion.p variants={itemVariants} className="mt-2 text-[15px] text-white/40">전문 상담사가 24시간 이내에 안내해 드립니다.</motion.p>
                     </div>
 
-                    <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); setIsSubmitted(true); }}>
-                      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                         <motion.div variants={itemVariants} className="space-y-2">
                           <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">이름</label>
                           <input 
                             type="text" 
                             required 
                             placeholder="성함" 
-                            className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                            className="w-full rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
                           />
                         </motion.div>
                         <motion.div variants={itemVariants} className="space-y-2">
@@ -1109,7 +1200,7 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                             type="tel" 
                             required 
                             placeholder="010-0000-0000" 
-                            className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                            className="w-full rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
                           />
                         </motion.div>
                       </div>
@@ -1119,7 +1210,7 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                           type="text" 
                           required 
                           placeholder="예: 서울시 강남구" 
-                          className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          className="w-full rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
                         />
                       </motion.div>
                       <motion.div variants={itemVariants} className="space-y-2">
@@ -1127,7 +1218,7 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                         <div className="relative">
                           <select 
                             required 
-                            className="w-full appearance-none rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                            className="w-full appearance-none rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
                           >
                             <option value="" className="text-black">유형을 선택해주세요</option>
                             <option value="입주청소" className="text-black">입주 청소</option>
@@ -1141,12 +1232,33 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                         </div>
                       </motion.div>
 
+                      {/* Agreement Checkbox */}
+                      <motion.div 
+                        variants={itemVariants} 
+                        className="flex items-center gap-3 py-2 cursor-pointer group"
+                        onClick={() => setAgreed(!agreed)}
+                      >
+                        <div className={`h-5 w-5 rounded border flex items-center justify-center transition-all ${agreed ? 'bg-brand border-brand shadow-[0_0_10px_rgba(77,120,224,0.3)]' : 'border-white/20 group-hover:border-white/40'}`}>
+                          {agreed && <CheckCircle2 className="h-3.5 w-3.5 text-white" />}
+                        </div>
+                        <p className="text-[13px] text-white/40 group-hover:text-white/60 transition-colors leading-none">
+                          개인정보 수집 및 이용에 동의합니다 (필수)
+                        </p>
+                        <button 
+                          type="button" 
+                          onClick={(e) => { e.stopPropagation(); setView('privacy'); onClose(); }}
+                          className="ml-auto text-[10px] font-bold text-white/20 hover:text-brand transition-all uppercase tracking-[0.2em] border-b border-white/5 hover:border-brand pb-0.5"
+                        >
+                          View Policy
+                        </button>
+                      </motion.div>
+
                       <motion.button 
                         variants={itemVariants}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={agreed ? { scale: 1.02 } : {}}
+                        whileTap={agreed ? { scale: 0.98 } : {}}
                         type="submit" 
-                        className="mt-6 w-full rounded-2xl py-6 text-[18px] font-bold text-white shadow-xl transition-all bg-brand shadow-brand/20 hover:bg-brand/90"
+                        className={`mt-4 w-full rounded-2xl py-5 text-[17.5px] font-bold text-white shadow-xl transition-all ${agreed ? 'bg-brand shadow-brand/20 hover:bg-brand/90 opacity-100' : 'bg-white/5 border border-white/5 opacity-40 cursor-not-allowed'}`}
                       >
                         상담 신청하기
                       </motion.button>
@@ -1462,10 +1574,22 @@ const Footer = ({
           </div>
 
           <div className="mt-20 pt-10 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-6">
-            <p className="text-[13px] text-white/20">© 2024 ECO SAMSUNG. All rights reserved.</p>
+            <p className="text-[13px] text-white/20">© 2026 ECO SAMSUNG. All rights reserved.</p>
             <div className="flex gap-8">
-              <button onClick={() => (setView('privacy'))} className="text-[13px] text-white/20 hover:text-white transition-colors">Privacy Policy</button>
-              <button onClick={() => (setView('terms'))} className="text-[13px] text-white/20 hover:text-white transition-colors">Terms of Service</button>
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); setView('privacy'); }} 
+                className="text-[13px] text-white/20 hover:text-white hover:underline underline-offset-4 transition-all"
+              >
+                Privacy Policy
+              </a>
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); setView('terms'); }} 
+                className="text-[13px] text-white/20 hover:text-white hover:underline underline-offset-4 transition-all"
+              >
+                Terms of Service
+              </a>
             </div>
           </div>
         </div>
