@@ -245,7 +245,8 @@ export default function App() {
       desc: "에코삼성은 하도급 없이 모든 공정을 본사가 직접 관리하는 100% 직영 시스템을 고집합니다. 이는 균일한 최상급 품질과 책임 있는 A/S를 보장하는 유일한 길입니다.",
       detail: "Reliable",
       value: "100%",
-      image: uspDirect
+      image: uspDirect,
+      video: directVideo
     },
     {
       id: "02",
@@ -667,9 +668,14 @@ export default function App() {
                               {usp.subtitle}
                             </h2>
                             <div className="mt-8 flex justify-end">
-                              <button className="rounded-full border border-white/20 bg-white/10 px-8 py-3 lg:px-12 lg:py-5 text-[12px] lg:text-[15px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md">
-                                Explore Experience
-                              </button>
+                              <a 
+                                href="https://blog.naver.com/az0804_/223960876649"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full border border-white/20 bg-white/10 px-8 py-3 lg:px-12 lg:py-5 text-[12px] lg:text-[15px] font-bold text-white backdrop-blur-md transition-all hover:bg-white/20"
+                              >
+                                에코삼성 자세히 알아보기
+                              </a>
                             </div>
                           </motion.div>
 
@@ -755,6 +761,15 @@ export default function App() {
 }
 
 const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Reset submit state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setIsSubmitted(false);
+    }
+  }, [isOpen]);
+
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.9, y: 20 },
     visible: { 
@@ -828,73 +843,172 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
               </motion.div>
             </div>
 
-            {/* Right Side: Form */}
-            <div className="flex-1 p-10 lg:p-14">
-              <div className="mb-10">
-                <motion.span variants={itemVariants} className="text-[12px] font-bold uppercase tracking-[0.4em] text-white/60">Inquiry</motion.span>
-                <motion.h2 variants={itemVariants} className="mt-4 text-[36px] font-bold tracking-tight">무료 견적 상담</motion.h2>
-                <motion.p variants={itemVariants} className="mt-2 text-[15px] text-white/40">전문 상담사가 24시간 이내에 안내해 드립니다.</motion.p>
-              </div>
-
-              <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); alert('상담 신청이 완료되었습니다.'); onClose(); }}>
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                  <motion.div variants={itemVariants} className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">이름</label>
-                    <input 
-                      type="text" 
-                      required 
-                      placeholder="성함" 
-                      className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
-                    />
-                  </motion.div>
-                  <motion.div variants={itemVariants} className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">연락처</label>
-                    <input 
-                      type="tel" 
-                      required 
-                      placeholder="010-0000-0000" 
-                      className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
-                    />
-                  </motion.div>
-                </div>
-                <motion.div variants={itemVariants} className="space-y-2">
-                  <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">지역</label>
-                  <input 
-                    type="text" 
-                    required 
-                    placeholder="예: 서울시 강남구" 
-                    className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
-                  />
-                </motion.div>
-                <motion.div variants={itemVariants} className="space-y-2">
-                  <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">서비스 유형</label>
-                  <div className="relative">
-                    <select 
-                      required 
-                      className="w-full appearance-none rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
-                    >
-                      <option value="" className="text-black">유형을 선택해주세요</option>
-                      <option value="입주청소" className="text-black">입주 청소</option>
-                      <option value="이사청소" className="text-black">이사 청소</option>
-                      <option value="특수청소" className="text-black">특수 세정 (대리석/외벽 등)</option>
-                      <option value="정기관리" className="text-black">정기 관리 서비스</option>
-                    </select>
-                    <div className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2">
-                      <ChevronRight className="h-4 w-4 rotate-90 opacity-40" />
+            {/* Right Side Contents */}
+            <div className="flex-1 p-10 lg:p-14 relative min-h-[500px] flex flex-col justify-center">
+              <AnimatePresence mode="wait">
+                {!isSubmitted ? (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                  >
+                    <div className="mb-10">
+                      <motion.span variants={itemVariants} className="text-[12px] font-bold uppercase tracking-[0.4em] text-white/60">Inquiry</motion.span>
+                      <motion.h2 variants={itemVariants} className="mt-4 text-[36px] font-bold tracking-tight">무료 견적 상담</motion.h2>
+                      <motion.p variants={itemVariants} className="mt-2 text-[15px] text-white/40">전문 상담사가 24시간 이내에 안내해 드립니다.</motion.p>
                     </div>
-                  </div>
-                </motion.div>
 
-                <motion.button 
-                  variants={itemVariants}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="submit" 
-                  className="mt-6 w-full rounded-2xl py-6 text-[18px] font-bold text-white shadow-xl transition-all bg-brand shadow-brand/20 hover:bg-brand/90"
-                >
-                  상담 신청하기
-                </motion.button>
-              </form>
+                    <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); setIsSubmitted(true); }}>
+                      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                        <motion.div variants={itemVariants} className="space-y-2">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">이름</label>
+                          <input 
+                            type="text" 
+                            required 
+                            placeholder="성함" 
+                            className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          />
+                        </motion.div>
+                        <motion.div variants={itemVariants} className="space-y-2">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">연락처</label>
+                          <input 
+                            type="tel" 
+                            required 
+                            placeholder="010-0000-0000" 
+                            className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          />
+                        </motion.div>
+                      </div>
+                      <motion.div variants={itemVariants} className="space-y-2">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">지역</label>
+                        <input 
+                          type="text" 
+                          required 
+                          placeholder="예: 서울시 강남구" 
+                          className="w-full rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                        />
+                      </motion.div>
+                      <motion.div variants={itemVariants} className="space-y-2">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">서비스 유형</label>
+                        <div className="relative">
+                          <select 
+                            required 
+                            className="w-full appearance-none rounded-xl border px-5 py-4 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          >
+                            <option value="" className="text-black">유형을 선택해주세요</option>
+                            <option value="입주청소" className="text-black">입주 청소</option>
+                            <option value="이사청소" className="text-black">이사 청소</option>
+                            <option value="특수청소" className="text-black">특수 세정 (대리석/외벽 등)</option>
+                            <option value="정기관리" className="text-black">정기 관리 서비스</option>
+                          </select>
+                          <div className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2">
+                            <ChevronRight className="h-4 w-4 rotate-90 opacity-40" />
+                          </div>
+                        </div>
+                      </motion.div>
+
+                      <motion.button 
+                        variants={itemVariants}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit" 
+                        className="mt-6 w-full rounded-2xl py-6 text-[18px] font-bold text-white shadow-xl transition-all bg-brand shadow-brand/20 hover:bg-brand/90"
+                      >
+                        상담 신청하기
+                      </motion.button>
+                    </form>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="relative flex h-full w-full flex-col items-center justify-center text-center overflow-hidden"
+                  >
+                    {/* Interior Background Effects for Success State */}
+                    <div className="absolute inset-0 z-0 opacity-10">
+                      <video autoPlay muted loop playsInline className="h-full w-full object-cover">
+                        <source src="https://hzhedioacvqzxxlkttah.supabase.co/storage/v1/object/public/herolanding-herolanding/0414-EcoSamsung.webm" type="video/webm" />
+                      </video>
+                      <div className="absolute inset-0 bg-black/40" />
+                    </div>
+                    
+                    <div className="absolute inset-0 z-0">
+                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[300px] rounded-full bg-brand/10 blur-[100px]" />
+                    </div>
+
+                    <div className="relative z-10 flex flex-col items-center">
+                      <motion.div
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.1, duration: 0.8 }}
+                        className="mb-12 flex flex-col items-center gap-2"
+                      >
+                        <div className="flex flex-col leading-none text-white/40">
+                          <span className="text-[14px] font-black tracking-[0.2em]">ECO</span>
+                          <span className="text-[9px] font-light tracking-[0.4em]">SAMSUNG</span>
+                        </div>
+                        <div className="mt-4 h-[1px] w-8 bg-white/20" />
+                        <span className="mt-2 text-[10px] font-bold uppercase tracking-[0.5em] text-brand">Registration Successful</span>
+                      </motion.div>
+
+                      <div className="relative mb-10">
+                        <motion.div
+                          initial={{ scale: 0, rotate: -45 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ delay: 0.3, type: "spring", stiffness: 200, damping: 15 }}
+                          className="flex h-20 w-20 items-center justify-center rounded-full bg-brand shadow-[0_0_40px_rgba(77,120,224,0.3)]"
+                        >
+                          <CheckCircle2 className="h-10 w-10 text-white" />
+                        </motion.div>
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: [0, 1, 0], scale: 1.5 }}
+                          transition={{ delay: 0.5, duration: 1.5, repeat: Infinity }}
+                          className="absolute inset-0 rounded-full border-2 border-brand/50"
+                        />
+                      </div>
+                      
+                      <motion.h2 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-[28px] lg:text-[36px] font-bold tracking-tight text-white mb-4"
+                      >
+                        당신의 공간이 곧<br />
+                        <span className="text-brand">새로운 가치</span>를 찾게 됩니다
+                      </motion.h2>
+                      
+                      <motion.p 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="text-[14px] lg:text-[16px] text-white/40 leading-relaxed max-w-[280px] lg:max-w-md mb-12"
+                      >
+                        에코삼성의 정밀 진단 시스템으로 확인 후<br />
+                        전문 상담사가 24시간 이내에 직접 안내해 드리겠습니다.
+                      </motion.p>
+                      
+                      <motion.button 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7 }}
+                        onClick={onClose}
+                        whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
+                        whileTap={{ scale: 0.95 }}
+                        className="group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-10 py-4 text-[13px] font-bold uppercase tracking-widest text-white transition-all overflow-hidden"
+                      >
+                        <span>Confirm Order</span>
+                        <div className="h-1 w-1 rounded-full bg-brand transition-all group-hover:scale-[10]" />
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+
+              </AnimatePresence>
             </div>
             
             {/* Close Button Mobile */}
