@@ -46,7 +46,7 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
   return (
     <div 
       ref={containerRef}
-      className="relative aspect-[16/10] w-full overflow-hidden rounded-[4px] select-none bg-gray-100 shadow-2xl shadow-black/5 touch-none"
+      className="relative aspect-[4/3] sm:aspect-[16/10] w-full overflow-hidden rounded-[4px] select-none bg-gray-100 shadow-2xl shadow-black/5 touch-none"
     >
       {/* After Image (Base) */}
       <div className="relative h-full w-full">
@@ -248,15 +248,15 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
-        rotateX: isPreview ? 0 : rotateX,
-        rotateY: isPreview ? 0 : rotateY,
+        rotateX: isPreview ? 0 : (typeof window !== 'undefined' && window.innerWidth < 1024 ? 0 : rotateX),
+        rotateY: isPreview ? 0 : (typeof window !== 'undefined' && window.innerWidth < 1024 ? 0 : rotateY),
         transformStyle: "preserve-3d",
       }}
-      className={`group relative h-full w-full overflow-hidden rounded-[16px] bg-[#0d0d0d] border border-white/5 p-6 lg:p-10 transition-all hover:bg-[#111] ${isPreview ? "opacity-30 grayscale blur-[2px]" : ""}`}
+      className={`group relative h-full w-full overflow-hidden rounded-[16px] bg-[#0d0d0d] border border-white/5 p-4 sm:p-6 lg:p-10 transition-all hover:bg-[#111] ${isPreview ? "opacity-30 grayscale blur-[2px]" : ""} touch-none md:touch-auto`}
     >
       <div 
         style={{ transform: "translateZ(60px)" }}
-        className="relative mb-6 lg:mb-8 h-[220px] lg:h-[260px] w-full flex items-center justify-center rounded-[8px] bg-black/40 border border-white/5 overflow-hidden"
+        className="relative mb-4 sm:mb-6 lg:mb-8 h-[140px] sm:h-[220px] lg:h-[260px] w-full flex items-center justify-center rounded-[8px] bg-black/40 border border-white/5 overflow-hidden"
       >
         <GsapVisual type={item.id} />
       </div>
@@ -270,7 +270,7 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
           {item.text}
         </h3>
         {!isPreview && (
-          <p className="mt-4 lg:mt-6 text-[15px] lg:text-[17px] leading-relaxed text-white/40 group-hover:text-white/70 transition-colors whitespace-pre-line">
+          <p className="mt-2 sm:mt-4 lg:mt-6 text-[14px] sm:text-[15px] lg:text-[17px] leading-relaxed text-white/40 group-hover:text-white/70 transition-colors whitespace-pre-line break-keep">
             {item.desc}
           </p>
         )}
@@ -289,7 +289,7 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
 
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'privacy' | 'terms'>('home');
+  const [view, setView] = useState<'home' | 'privacy' | 'terms' | '404'>('home');
   const navLinks = [
     { label: "문제의식", id: "problem-section" },
     { label: "시공 사례", id: "portfolio-section" },
@@ -489,13 +489,15 @@ export default function App() {
       document.title = `개인정보 처리방침 | ${baseTitle}`;
     } else if (view === 'terms') {
       document.title = `서비스 이용약관 | ${baseTitle}`;
+    } else if (view === '404') {
+      document.title = `페이지를 찾을 수 없습니다 | ${baseTitle}`;
     } else {
       document.title = baseTitle;
     }
   }, [view]);
 
   return (
-    <div ref={containerRef} className="relative h-screen w-full bg-black font-sans text-white selection:bg-brand/30 overflow-y-auto overscroll-none snap-y snap-proximity scroll-smooth">
+    <div ref={containerRef} className="relative h-[100svh] w-full bg-black font-sans text-white selection:bg-brand/30 overflow-y-auto overscroll-none snap-y snap-proximity scroll-smooth">
       {/* Navigation Bar */}
       <motion.nav 
         style={{ 
@@ -571,8 +573,10 @@ export default function App() {
         </>
       ) : view === 'privacy' ? (
         <PrivacyPolicyView setView={setView} />
-      ) : (
+      ) : view === 'terms' ? (
         <TermsOfServiceView setView={setView} />
+      ) : (
+        <NotFoundView setView={setView} />
       )}
 
       <Footer 
@@ -598,7 +602,7 @@ export default function App() {
 
 // Sub-components to keep App cleaner
 const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
-  <section className="relative h-screen w-full overflow-hidden snap-start snap-always">
+  <section className="relative h-[100svh] w-full overflow-hidden snap-start snap-always">
     <div className="absolute left-[5vw] top-[5vh] z-30">
       <span className="text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">Section 01</span>
     </div>
@@ -620,20 +624,27 @@ const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
       <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent z-[1]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-[1]" />
     </div>
-    <main className="relative z-10 grid h-full grid-cols-12 px-[5vw] pb-[12vh]">
-      <div className="col-span-12 flex flex-col justify-end lg:col-span-8">
+    <main className="relative z-10 grid h-full grid-cols-12 px-[5vw] pb-[8vh] lg:pb-[12vh]">
+        <div className="col-span-12 flex flex-col justify-end lg:col-span-7 pt-[10svh] lg:pt-0">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}>
-          <h1 className="max-w-[850px] text-[28px] md:text-[42px] lg:text-[52px] font-bold leading-[1.3] lg:leading-[1.25] tracking-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+          {/* Mobile Title */}
+          <h1 className="block md:hidden max-w-[850px] text-[24px] sm:text-[28px] font-bold leading-[1.3] tracking-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+            겉만 청소하면 다시 더러워집니다.<br />
+            원인마저 제거하려면<br />
+            <span className="text-brand">에코삼성</span>입니다.
+          </h1>
+          {/* PC Title */}
+          <h1 className="hidden md:block max-w-[850px] md:text-[42px] lg:text-[52px] font-bold leading-[1.3] lg:leading-[1.25] tracking-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] break-keep">
             겉만 청소하면 다시 더러워집니다.<br />
             원인마저 제거하려면 <span className="text-brand">에코삼성</span>입니다.
           </h1>
-          <p className="mt-[20px] lg:mt-[28px] max-w-[600px] text-[15px] md:text-[18px] lg:text-[20px] font-semibold text-white/90 drop-shadow-md leading-relaxed">
+          <p className="hidden md:block mt-[20px] lg:mt-[28px] max-w-[600px] text-[15px] md:text-[18px] lg:text-[20px] font-semibold text-white/90 drop-shadow-md leading-relaxed">
             프리미엄 특수 세정 솔루션. 에코삼성입니다.
           </p>
         </motion.div>
       </div>
-      <div className="col-span-12 flex flex-col justify-end lg:col-start-9 lg:col-end-13">
-        <div className="flex flex-col gap-[4vh]">
+      <div className="col-span-12 flex flex-col justify-end lg:col-start-10 lg:col-end-13 mt-8 lg:mt-0">
+        <div className="flex flex-col gap-[2vh] lg:gap-[4vh]">
           {["하도급없는 100% 직영 시공", "철두철미 섬세한 여전문가 드림팀", "원인부터 완벽히 제거하는 청소 시공"].map((feature, i) => (
             <motion.div key={feature} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 + i * 0.1 }} className="group relative border-t border-white/10 pt-[1.5vh] lg:border-t-2 lg:pt-[2vh] transition-colors hover:border-brand">
               <div className="flex items-start justify-between">
@@ -656,14 +667,14 @@ const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
     <div className="absolute left-[5vw] top-[5vh] z-30">
       <span className="text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">Section 02</span>
     </div>
-    <div className="mx-auto max-w-[1600px]">
-      <div className="grid grid-cols-12 gap-12">
-        <div className="col-span-12 lg:col-span-4">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="text-[32px] md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-white">
+    <div className="mx-auto max-w-[1472px] w-full">
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-12 w-full">
+        <div className="w-full lg:col-span-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="w-full">
+            <h2 className="text-[32px] md:text-[42px] lg:text-[48px] xl:text-[56px] font-bold leading-tight tracking-tight text-white break-keep">
               청소 업체에 맡겼는데<br />왜 모두가<br />실망하는 걸까요?
             </h2>
-            <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/40">
+            <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/40 break-keep">
               청소 업체들의 구조적인 문제,<br />결국 피해는 모두<br />고객의 몫이 되고 있습니다.
             </p>
             <div className="mt-12 flex items-center gap-4">
@@ -674,10 +685,10 @@ const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
             </div>
           </motion.div>
         </div>
-        <div className="col-span-12 lg:col-span-8 overflow-hidden">
-          <div className="relative h-[500px] md:h-[550px] w-full">
+        <div className="w-full lg:col-span-8 overflow-hidden relative">
+          <div className="relative h-[360px] sm:h-[500px] md:h-[550px] w-full overflow-hidden">
             <AnimatePresence initial={false}>
-              <motion.div key={currentProblemIndex} initial={{ x: "100%", opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: "-100%", opacity: 0 }} transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }} className="absolute inset-0">
+              <motion.div key={currentProblemIndex} initial={{ x: "100%", opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: "-100%", opacity: 0 }} transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }} className="absolute inset-0 w-full left-0 right-0">
                 <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-2">
                   <InteractiveProblemCard item={problems[currentProblemIndex]} />
                   <div className="hidden lg:block h-full">
@@ -698,13 +709,13 @@ const PortfolioSection = ({ portfolios }: any) => (
     <div className="absolute left-[5vw] top-[5vh] z-30">
       <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 03</span>
     </div>
-    <div className="mx-auto max-w-[1600px]">
+    <div className="mx-auto max-w-[1472px]">
       <div className="mb-16 lg:mb-24 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-8">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <span className="text-[10px] lg:text-[12px] font-bold uppercase tracking-[0.4em] text-brand">Portfolio</span>
-          <h2 className="mt-4 text-[32px] md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-black">에코삼성이 다녀가면<br />어디든 신축이 됩니다</h2>
+          <h2 className="mt-4 text-[32px] md:text-[42px] lg:text-[48px] xl:text-[56px] font-bold leading-tight tracking-tight text-black break-keep">에코삼성이 다녀가면<br />어디든 신축이 됩니다</h2>
         </motion.div>
-        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="max-w-md text-[15px] lg:text-[18px] leading-relaxed text-black/40">
+        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="max-w-md text-[15px] lg:text-[18px] leading-relaxed text-black/40 break-keep">
           수많은 현장에서 검증된 에코삼성만의 특수 세정 솔루션.<br />비포 & 애프터 슬라이더를 통해 직접 확인해보세요.
         </motion.p>
       </div>
@@ -714,8 +725,8 @@ const PortfolioSection = ({ portfolios }: any) => (
             <div className="flex-1 w-full shadow-2xl shadow-black/5"><BeforeAfterSlider before={item.before} after={item.after} /></div>
             <div className="flex-1 max-w-xl w-full">
               <span className="text-[48px] lg:text-[64px] font-black text-black/5 leading-none">{item.id}</span>
-              <h3 className="text-[24px] lg:text-[32px] font-bold mt-[-10px] lg:mt-[-20px] mb-4 lg:mb-6 text-black">{item.title}</h3>
-              <p className="text-[16px] lg:text-[18px] text-black/40 leading-relaxed mb-6 lg:mb-8">{item.desc}</p>
+              <h3 className="text-[22px] sm:text-[24px] lg:text-[32px] font-bold mt-[-10px] lg:mt-[-20px] mb-4 lg:mb-6 text-black break-keep">{item.title}</h3>
+              <p className="text-[15px] lg:text-[18px] text-black/40 leading-relaxed mb-6 lg:mb-8 break-keep">{item.desc}</p>
               <div className="flex flex-wrap gap-2">
                 {item.tags?.map((tag: any) => (
                   <span key={tag} className="px-3 py-1 text-[10px] lg:text-[11px] font-bold text-brand border border-brand/20 bg-brand/5 rounded-full uppercase tracking-wider">#{tag}</span>
@@ -730,16 +741,34 @@ const PortfolioSection = ({ portfolios }: any) => (
 );
 
 const UspSection = ({ section3Ref, usps, expandedUsp, containerRef }: any) => (
-  <section id="service-section" ref={section3Ref} className="relative z-10 h-[400vh] w-full bg-white text-black">
+  <section id="service-section" ref={section3Ref} className="relative z-10 w-full bg-white text-black">
+    {/* PC Version */}
+    <div className="hidden lg:block">
+      <UspSectionPC usps={usps} expandedUsp={expandedUsp} containerRef={containerRef} section3Ref={section3Ref} />
+    </div>
+    
+    {/* Mobile Version */}
+    <div className="block lg:hidden">
+      <UspSectionMobile usps={usps} />
+    </div>
+    
+    <div className="absolute left-[5vw] top-[5vh] z-40">
+      <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 04</span>
+    </div>
+  </section>
+);
+
+const UspSectionPC = ({ usps, expandedUsp, containerRef, section3Ref }: any) => (
+  <div className="relative h-[400vh] w-full">
     <div className="absolute inset-0 pointer-events-none">
       <div className="h-screen snap-start snap-always" />
       <div className="h-screen snap-start snap-always" />
       <div className="h-screen snap-start snap-always" />
       <div className="h-screen snap-start snap-always" />
     </div>
-    <div className="sticky top-0 h-screen w-full overflow-hidden">
+    <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <div className="flex flex-col lg:flex-row h-full w-full">
+        <div className="flex h-full w-full">
           {usps.map((usp: any, i: number) => {
             const isExpanded = expandedUsp === i;
             return (
@@ -747,8 +776,7 @@ const UspSection = ({ section3Ref, usps, expandedUsp, containerRef }: any) => (
                 key={i}
                 initial={false}
                 animate={{ 
-                  width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%")) : "100%",
-                  height: typeof window !== 'undefined' && window.innerWidth < 1024 ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%")) : "100%",
+                  width: isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"),
                   zIndex: isExpanded ? 10 : 1,
                   opacity: expandedUsp !== null && !isExpanded ? 0 : 1
                 }}
@@ -760,7 +788,7 @@ const UspSection = ({ section3Ref, usps, expandedUsp, containerRef }: any) => (
                     containerRef.current.scrollTo({ top: sectionTop + (i + 1) * viewportHeight, behavior: "smooth" });
                   }
                 }}
-                className={`relative overflow-hidden border-b lg:border-r border-black/5 group cursor-pointer ${isExpanded ? "flex-grow" : ""}`}
+                className={`relative overflow-hidden border-r border-black/5 group cursor-pointer ${isExpanded ? "flex-grow" : ""}`}
               >
                 <div className="absolute inset-0 z-0">
                   {usp.video ? (
@@ -773,26 +801,26 @@ const UspSection = ({ section3Ref, usps, expandedUsp, containerRef }: any) => (
                   <div className={`absolute inset-0 transition-opacity duration-1000 ${isExpanded ? "bg-black/20" : "bg-brand/90 group-hover:bg-brand/80"}`} />
                 </div>
                 <div className="relative z-20 h-full w-full">
-                  <motion.div animate={{ opacity: (expandedUsp === null || isExpanded) ? 1 : 0, y: isExpanded ? -20 : 0 }} className="absolute bottom-[6vh] lg:bottom-[8vh] left-[6vw] lg:left-[5vw] z-30">
-                    <div className="flex flex-col gap-1 lg:gap-2">
-                       <span className="text-[10px] lg:text-[14px] font-bold tracking-[0.4em] text-white/50 uppercase">{usp.label}</span>
-                       <h3 className={`font-bold tracking-tight text-white transition-all duration-1000 whitespace-pre-line ${isExpanded ? "text-[32px] md:text-[56px] lg:text-[72px]" : "text-[24px] md:text-[32px] lg:text-[42px]"}`}>{usp.title}</h3>
+                  <motion.div animate={{ opacity: (expandedUsp === null || isExpanded) ? 1 : 0, y: isExpanded ? -20 : 0 }} className="absolute bottom-[8vh] left-[5vw] z-30">
+                    <div className="flex flex-col gap-2">
+                       <span className="text-[14px] font-bold tracking-[0.4em] text-white/50 uppercase">{usp.label}</span>
+                       <h3 className={`font-bold tracking-tight text-white transition-all duration-1000 whitespace-pre-line break-keep ${isExpanded ? "text-[42px] lg:text-[72px]" : "text-[32px] lg:text-[42px]"}`}>{usp.title}</h3>
                     </div>
                   </motion.div>
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative h-full w-full z-20">
-                        <motion.div initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5, duration: 1.2, ease: [0.19, 1, 0.22, 1] }} className="absolute top-[12vh] lg:top-[12vh] right-[6vw] lg:right-[5vw] text-right max-w-[85%] lg:max-w-3xl">
-                          <h2 className="text-[32px] md:text-[56px] lg:text-[72px] font-bold leading-[1.1] tracking-tighter text-white whitespace-pre-line">{usp.subtitle}</h2>
+                        <motion.div initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5, duration: 1.2, ease: [0.19, 1, 0.22, 1] }} className="absolute top-[12vh] right-[5vw] text-right max-w-3xl">
+                          <h2 className="text-[42px] lg:text-[72px] font-bold leading-[1.1] tracking-tighter text-white whitespace-pre-line break-keep">{usp.subtitle}</h2>
                           <div className="mt-8 flex justify-end">
-                            <a href={usp.link} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 bg-white/10 px-8 py-3 lg:px-12 lg:py-5 text-[12px] lg:text-[15px] font-bold text-white backdrop-blur-md transition-all hover:bg-white/20">에코삼성 자세히 알아보기</a>
+                            <a href={usp.link} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 bg-white/10 px-12 py-5 text-[15px] font-bold text-white backdrop-blur-md transition-all hover:bg-white/20">에코삼성 자세히 알아보기</a>
                           </div>
                         </motion.div>
-                        <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 1.2, ease: [0.19, 1, 0.22, 1] }} className="absolute bottom-[12vh] lg:bottom-[8vh] right-[6vw] lg:right-[5vw] text-right">
-                          <p className="max-w-md text-[14px] lg:text-[20px] leading-relaxed text-white/70 font-medium ml-auto">{usp.desc}</p>
-                          <div className="mt-8 lg:mt-12 flex items-center justify-end gap-3 text-[10px] lg:text-[12px] font-bold text-white/30 uppercase tracking-[0.3em]">
+                        <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 1.2, ease: [0.19, 1, 0.22, 1] }} className="absolute bottom-[8vh] right-[5vw] text-right">
+                          <p className="max-w-md text-[20px] leading-relaxed text-white/70 font-medium ml-auto break-keep">{usp.desc}</p>
+                          <div className="mt-12 flex items-center justify-end gap-3 text-[12px] font-bold text-white/30 uppercase tracking-[0.3em]">
                             <span>Scroll down for more</span>
-                            <div className="h-[1px] w-8 lg:w-12 bg-white/20" />
+                            <div className="h-[1px] w-12 bg-white/20" />
                             <ChevronRight className="h-4 w-4 rotate-90" />
                           </div>
                         </motion.div>
@@ -805,19 +833,79 @@ const UspSection = ({ section3Ref, usps, expandedUsp, containerRef }: any) => (
           })}
         </div>
       </div>
-      <div className="absolute left-[5vw] top-[5vh] z-40">
-        <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 04</span>
-      </div>
     </div>
-  </section>
+  </div>
 );
+
+const UspSectionMobile = ({ usps }: any) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  return (
+    <div className="flex flex-col gap-0 border-y border-black/5">
+      {usps.map((usp: any, i: number) => {
+        const isActive = activeIndex === i;
+        return (
+          <div 
+            key={i} 
+            className="group relative overflow-hidden border-b border-black/5"
+            onClick={() => setActiveIndex(i)}
+          >
+            {/* Background */}
+            <div className="absolute inset-0 z-0">
+              {usp.video ? (
+                <video autoPlay muted loop playsInline className={`h-full w-full object-cover transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`}>
+                  <source src={usp.video} type="video/webm" />
+                </video>
+              ) : (
+                <img src={usp.image} alt={usp.title} className={`h-full w-full object-cover transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`} referrerPolicy="no-referrer" />
+              )}
+              <div className={`absolute inset-0 transition-colors duration-700 ${isActive ? "bg-black/60" : "bg-white"}`} />
+            </div>
+
+            {/* Header Content */}
+            <div className="relative z-10 p-[6vw] flex flex-col items-start gap-2">
+              <span className={`text-[10px] font-bold tracking-[0.4em] uppercase transition-colors duration-500 ${isActive ? "text-brand" : "text-black/30"}`}>0{usp.id} / {usp.label}</span>
+              <div className="flex w-full items-center justify-between">
+                <h3 className={`text-[24px] font-bold tracking-tight transition-colors duration-500 ${isActive ? "text-white" : "text-black"}`}>{usp.title}</h3>
+                <ChevronRight className={`h-5 w-5 transition-all duration-500 ${isActive ? "rotate-90 text-brand" : "text-black/20"}`} />
+              </div>
+
+              {/* Collapsible Content */}
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+                    className="overflow-hidden w-full"
+                  >
+                    <div className="pt-8 pb-4">
+                      <h4 className="text-[28px] font-bold leading-[1.2] text-white whitespace-pre-line mb-8">{usp.subtitle}</h4>
+                      <p className="text-[15px] leading-relaxed text-white/60 mb-10">{usp.desc}</p>
+                      <a href={usp.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3.5 text-[13px] font-bold text-white shadow-xl shadow-brand/20">
+                        에코삼성 스토리 보기
+                        <ArrowUpRight className="h-4 w-4" />
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 
 const CtaSection = ({ onOpenModal }: any) => (
   <section id="cta-section" className="relative z-10 bg-white py-[15vh] px-[5vw]">
     <div className="absolute left-[5vw] top-[5vh] z-30">
       <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 06</span>
     </div>
-    <div className="mx-auto max-w-[1400px]">
+    <div className="mx-auto max-w-[1472px]">
       <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative overflow-hidden rounded-[24px] lg:rounded-[32px] bg-brand px-6 py-16 text-center lg:py-32 shadow-2xl shadow-brand/20">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <video autoPlay muted loop playsInline className="h-full w-full object-cover opacity-30 grayscale mix-blend-overlay">
@@ -826,7 +914,14 @@ const CtaSection = ({ onOpenModal }: any) => (
           <div className="absolute inset-0 bg-gradient-to-b from-brand/80 via-brand/60 to-brand/80" />
         </div>
         <div className="relative z-10">
-          <h2 className="text-[32px] md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-white">
+          {/* Mobile Title */}
+          <h2 className="block md:hidden text-[24px] sm:text-[32px] font-bold leading-tight tracking-tight text-white mb-4">
+            청소가 필요한 모든 순간,<br />
+            전문가를 만나면<br />
+            1년이 넘도록 깨끗합니다.
+          </h2>
+          {/* PC Title */}
+          <h2 className="hidden md:block md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-white break-keep">
             청소가 필요한 모든 공간,<br />전문가를 만나면 1년 넘도록 깨끗합니다.
           </h2>
           <p className="mx-auto mt-4 lg:mt-6 max-w-xl text-[14px] leading-relaxed text-white/90 lg:text-[18px]">
@@ -1072,6 +1167,77 @@ const TermsOfServiceView = ({ setView }: { setView: (v: 'home') => void }) => (
   </SubPageLayout>
 );
 
+const NotFoundView = ({ setView }: { setView: (v: 'home') => void }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+    gsap.to(".not-found-particle", {
+      y: "random(-100, 100)",
+      x: "random(-100, 100)",
+      opacity: "random(0.1, 0.5)",
+      duration: "random(2, 4)",
+      repeat: -1,
+      yoyo: true,
+      stagger: 0.1,
+      ease: "sine.inOut"
+    });
+  }, { scope: containerRef });
+
+  return (
+    <section ref={containerRef} className="relative h-[100svh] w-full bg-black flex flex-col items-center justify-center overflow-hidden px-[5vw]">
+       {/* Background Particles */}
+       <div className="absolute inset-0 pointer-events-none">
+          {[...Array(24)].map((_, i) => (
+            <div 
+              key={i} 
+              className="not-found-particle absolute h-1 w-1 rounded-full bg-brand"
+              style={{ 
+                left: `${Math.random() * 100}%`, 
+                top: `${Math.random() * 100}%` 
+              }}
+            />
+          ))}
+       </div>
+
+       <motion.div 
+         initial={{ opacity: 0, scale: 0.8 }}
+         animate={{ opacity: 1, scale: 1 }}
+         transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+         className="relative z-10 text-center"
+       >
+         <div className="relative inline-block mb-12">
+            <span className="text-[120px] md:text-[180px] lg:text-[240px] font-black text-white/5 tracking-tighter select-none">404</span>
+            <div className="absolute inset-0 flex items-center justify-center">
+               <div className="h-[2px] w-24 bg-brand/50 mb-8" />
+            </div>
+         </div>
+         
+         <h2 className="text-[12px] lg:text-[14px] font-bold text-brand tracking-[0.6em] uppercase mb-8">Page Not Found</h2>
+         
+         <h1 className="text-[28px] md:text-[36px] lg:text-[42px] font-bold text-white mb-6 leading-tight">
+            보이지 않는 먼지까지 찾아내지만,<br />
+            요청하신 페이지는 찾을 수 없습니다.
+         </h1>
+         
+         <p className="text-white/40 text-[16px] lg:text-[18px] mb-12 max-w-xl mx-auto leading-relaxed font-medium">
+            찾으시는 페이지가 삭제되었거나 경로가 변경되었을 수 있습니다.<br />
+            아래 버튼을 통해 메인 화면으로 돌아가실 수 있습니다.
+         </p>
+
+         <motion.button
+           whileHover={{ scale: 1.05, backgroundColor: "#4D78E0" }}
+           whileTap={{ scale: 0.95 }}
+           onClick={() => setView('home')}
+           className="px-12 py-5 bg-brand text-white font-bold text-[14px] rounded-full shadow-2xl shadow-brand/20 transition-all uppercase tracking-[0.3em]"
+         >
+           Return to Main
+         </motion.button>
+       </motion.div>
+    </section>
+  );
+};
+
 const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: () => void, setView: (v: 'privacy' | 'terms') => void }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -1121,7 +1287,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-8">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 lg:p-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -1135,7 +1301,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative flex w-full max-w-5xl overflow-hidden rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)]"
+            className="relative flex w-full max-w-5xl overflow-hidden rounded-[24px] lg:rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)]"
           >
             {/* Left Side: Visual/Info */}
             <div className="relative hidden w-[40%] flex-col justify-between bg-brand p-12 lg:flex">
@@ -1167,7 +1333,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
             </div>
 
             {/* Right Side Contents */}
-            <div className="flex-1 p-10 lg:p-14 relative min-h-[550px] flex flex-col justify-center">
+            <div className="flex-1 p-6 sm:p-10 lg:p-14 relative min-h-[500px] sm:min-h-[550px] flex flex-col justify-center">
               <AnimatePresence mode="wait">
                 {!isSubmitted ? (
                   <motion.div
@@ -1320,7 +1486,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="text-[28px] lg:text-[36px] font-bold tracking-tight text-white mb-4"
+                        className="text-[24px] sm:text-[28px] lg:text-[36px] font-bold tracking-tight text-white mb-4"
                       >
                         문의 남겨주셔서 감사합니다.
                       </motion.h2>
@@ -1416,7 +1582,7 @@ const PhoneModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative flex w-full max-w-lg overflow-hidden rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] p-10 lg:p-14 text-center"
+            className="relative flex w-full max-w-lg overflow-hidden rounded-[24px] lg:rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] p-8 sm:p-10 lg:p-14 text-center"
           >
             <div className="w-full flex flex-col items-center">
               <motion.div variants={itemVariants} className="mb-6 flex flex-col items-center gap-2">
@@ -1477,7 +1643,8 @@ const Footer = ({
   navLinks, 
   scrollToSection, 
   onOpenModal,
-  onPhoneClick
+  onPhoneClick,
+  setView
 }: { 
   navLinks: { label: string, id: string }[], 
   scrollToSection: (id: string) => void,
