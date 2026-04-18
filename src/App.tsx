@@ -3,9 +3,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
-import { ArrowUpRight, MoreHorizontal, ChevronRight, AlertCircle, Wind, Search, Instagram, Facebook, Youtube } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import { ArrowUpRight, MoreHorizontal, ChevronRight, AlertCircle, Wind, Search, Instagram, Facebook, Youtube, CheckCircle2, Sparkles, Building2, LayoutPanelLeft } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import publicBefore from "./pictures/ecosamsung-공공기관 청소-before.png";
+import publicAfter from "./pictures/ecosamsung-공공기관 청소-after.png";
+import kitchenBefore from "./pictures/ecosamsung-주방 청소-before.png";
+import kitchenAfter from "./pictures/ecosamsung-주방 청소-after.png";
+import hotelBefore from "./pictures/ecosamsung-호텔 외벽 청소-before.png";
+import hotelAfter from "./pictures/ecosamsung-호텔 외벽 청소-after.png";
+
+// AI Generated Assets (Internalized)
+import problemSubcontracting from "./assets/images/problem-subcontracting.png";
+import problemSurface from "./assets/images/problem-surface.png";
+import problemMold from "./assets/images/problem-mold.png";
+import uspDirect from "./assets/images/usp-direct.png";
+import uspTeam from "./assets/images/usp-team.png";
+import uspSolution from "./assets/images/usp-solution.png";
+import serviceRegular from "./assets/images/service-regular.png";
+import serviceSanitary from "./assets/images/service-sanitary.png";
+import serviceMovein from "./assets/images/service-movein.png";
+import serviceSpecial from "./assets/images/service-special.png";
+
+// USP Videos
+import directVideo from "./videos/ecosamsung-대구 청소 업체-직영 운영.webm";
 
 const BeforeAfterSlider = ({ before, after }: { before: string, after: string }) => {
   const [sliderPos, setSliderPos] = useState(50);
@@ -27,9 +48,6 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
       {/* After Image (Base) */}
       <div className="relative h-full w-full">
         <img src={after} alt="After" className="absolute inset-0 h-full w-full object-cover" referrerPolicy="no-referrer" />
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="rounded-full bg-black/40 px-6 py-2 text-[14px] font-bold text-white/40 backdrop-blur-md uppercase tracking-[0.2em] border border-white/10">(dummy image)</div>
-        </div>
       </div>
       
       {/* Before Image (Overlay) */}
@@ -39,16 +57,13 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
       >
         <div className="relative h-full" style={{ width: `${10000 / Math.max(0.1, sliderPos)}%` }}>
           <img src={before} alt="Before" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="rounded-full bg-black/40 px-6 py-2 text-[14px] font-bold text-white/40 backdrop-blur-md uppercase tracking-[0.2em] border border-white/10">(dummy image)</div>
-          </div>
         </div>
         <div className="absolute top-4 left-4 rounded-full bg-black/50 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md uppercase tracking-widest">Before</div>
       </div>
       
       <div className="absolute top-4 right-4 rounded-full bg-brand/80 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md uppercase tracking-widest">After</div>
 
-      {/* Slider Handle - Wide hit area (60px) */}
+      {/* Slider Handle */}
       <div 
         className="absolute top-0 bottom-0 z-20 w-[60px] -translate-x-1/2 cursor-col-resize flex items-center justify-center group/handle"
         style={{ left: `${sliderPos}%` }}
@@ -60,17 +75,10 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
         onPointerMove={(e) => {
           if (isDraggingRef.current) handleMove(e.clientX);
         }}
-        onPointerUp={() => {
-          isDraggingRef.current = false;
-        }}
-        onPointerCancel={() => {
-          isDraggingRef.current = false;
-        }}
+        onPointerUp={() => isDraggingRef.current = false}
+        onPointerCancel={() => isDraggingRef.current = false}
       >
-        {/* Visual Line */}
         <div className="h-full w-1 bg-brand shadow-[0_0_10px_rgba(77,120,224,0.5)]" />
-        
-        {/* Visual Circle */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-brand text-white shadow-xl active:scale-90 transition-transform">
           <div className="flex gap-1">
             <div className="h-4 w-0.5 bg-white/40" />
@@ -83,49 +91,117 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
   );
 };
 
+// New Interactive 3D Card Component
+const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPreview?: boolean }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX: isPreview ? 0 : rotateX,
+        rotateY: isPreview ? 0 : rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      className={`group relative h-full w-full overflow-hidden rounded-[4px] bg-[#111] p-6 lg:p-8 transition-all hover:bg-[#161616] ${isPreview ? "opacity-30 grayscale" : ""}`}
+    >
+      <div 
+        style={{ transform: "translateZ(50px)" }}
+        className="relative mb-8 lg:mb-12 flex h-[50%] lg:h-[60%] items-center justify-center overflow-hidden rounded-[2px]"
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 z-10" />
+        <motion.img
+          src={item.image}
+          alt={item.text}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          style={{ transform: "translateZ(20px)" }}
+        />
+        <div className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10">
+          {item.icon}
+        </div>
+        {/* Glass Glare Effect */}
+        <motion.div
+            className="absolute inset-0 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            style={{
+                background: `radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.08) 0%, transparent 80%)`,
+            }}
+        />
+      </div>
+
+      <div style={{ transform: "translateZ(30px)" }} className="mt-auto">
+        <h3 className="text-[18px] lg:text-[22px] font-bold text-white/90 group-hover:text-brand transition-colors">
+          {item.text}
+        </h3>
+        {!isPreview && (
+          <p className="mt-3 lg:mt-4 text-[14px] lg:text-[16px] leading-relaxed text-white/60 group-hover:text-white/80 transition-colors line-clamp-3 lg:line-clamp-none">
+            {item.desc}
+          </p>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
 
 export default function App() {
   const navLinks = ["시공 사례", "서비스 소개", "이용 후기", "견적 문의", "FAQ"];
   const [videoKey, setVideoKey] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   
-  const stats = [
-    { label: "누적 시공 건수", value: "12,480" },
-    { label: "고객 만족도", value: "99.8%" },
-    { label: "보유 전문 장비", value: "42" },
-  ];
-
-  const [activeOption, setActiveOption] = useState(1);
+  const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   const problems = [
     {
       id: "01",
       icon: <AlertCircle className="h-6 w-6 text-brand" />,
-      text: "청소해도 며칠 지나면 다시 더러워져요",
-      desc: "표면만 닦아내는 청소는 한계가 있습니다. 오염의 근본적인 원인을 해결하지 않으면 오염은 반드시 재발합니다.",
-      image: "https://picsum.photos/seed/dust/400/500"
+      text: "광고한 거랑 청소 상태가 너무 달라요",
+      desc: "의뢰를 받은 것은 다시 하청으로 내리는 고객과의 '신뢰'를 저버리는 하도급 중심 구조. 청소 품질 편차가 일정할 수 밖에 없습니다.",
+      image: problemSubcontracting
     },
     {
       id: "02",
-      icon: <Wind className="h-6 w-6 text-brand" />,
-      text: "업체 이용 후에도 냄새는 똑같이 나는 것 같아요",
-      desc: "냄새는 공기 중이 아닌, 보이지 않는 틈새와 깊숙한 곳에 박힌 오염원에서 시작됩니다. 원인을 찾아 제거해야 합니다.",
-      image: "https://picsum.photos/seed/smell/400/500"
+      icon: <Search className="h-6 w-6 text-brand" />,
+      text: "청소해도 며칠 지나면 다시 더러워져요",
+      desc: "표면만 닦아내는 청소는 한계가 있습니다. 오염의 근본적인 원인을 해결하지 않으면 오염은 반드시 재발합니다.",
+      image: problemSurface
     },
     {
       id: "03",
-      icon: <Search className="h-6 w-6 text-brand" />,
-      text: "눈에 보이는 곳만 청소해주지, 다른 곳은 여전히 먼지 투성이",
-      desc: "대부분의 업체는 매뉴얼에 따른 표면 청소에 집중합니다. 에코삼성은 보이지 않는 사각지대까지 철저하게 파고듭니다.",
-      image: "https://picsum.photos/seed/hidden/400/500"
+      icon: <Wind className="h-6 w-6 text-brand" />,
+      text: "업체 이용 후에도 냄새는 똑같이 나는 것 같아요",
+      desc: "냄새는 보이지 않는 틈새와 깊숙한 곳에 박힌 오염원에서 시작됩니다. 그저 겉만 청소하는 것은 아무 소용 없습니다.",
+      image: problemMold
     }
   ];
 
-  const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-
   useEffect(() => {
-    const interval = 50; // Update every 50ms for smooth progress
+    const interval = 50;
     const step = (interval / 2500) * 100;
     
     const timer = setInterval(() => {
@@ -163,13 +239,13 @@ export default function App() {
   const usps = [
     {
       id: "01",
-      title: "100% 직영 시공",
+      title: "100% 직영 시스템",
       subtitle: "Direct Management",
-      label: "OUR MANAGEMENT",
-      desc: "에코삼성은 하도급을 주지 않습니다. 모든 현장은 본사 소속의 숙련된 전문가들이 직접 책임지고 시공하여 균일하고 높은 품질을 보장합니다.",
-      detail: "Responsibility",
+      label: "OUR PRINCIPLE",
+      desc: "에코삼성은 하도급 없이 모든 공정을 본사가 직접 관리하는 100% 직영 시스템을 고집합니다. 이는 균일한 최상급 품질과 책임 있는 A/S를 보장하는 유일한 길입니다.",
+      detail: "Reliable",
       value: "100%",
-      image: "https://picsum.photos/seed/direct/1200/800"
+      image: uspDirect
     },
     {
       id: "02",
@@ -179,7 +255,7 @@ export default function App() {
       desc: "섬세함이 필요한 공간에는 여성 전문가들의 손길이 닿습니다. 철두철미한 디테일과 꼼꼼함으로 보이지 않는 곳까지 프리미엄 케어를 제공합니다.",
       detail: "Meticulous",
       value: "Premium",
-      image: "https://picsum.photos/seed/team/1200/800"
+      image: uspTeam
     },
     {
       id: "03",
@@ -189,42 +265,39 @@ export default function App() {
       desc: "단순한 오염 제거를 넘어, 오염과 악취의 근본 원인을 분석하고 해결합니다. 에코삼성만의 특수 세정 솔루션으로 깨끗함의 기준을 다시 정의합니다.",
       detail: "Solution",
       value: "Advanced",
-      image: "https://picsum.photos/seed/solution/1200/800"
+      image: uspSolution
     }
   ];
-
-  const [activeOptionSection4, setActiveOptionSection4] = useState(1);
 
   const portfolios = [
     {
       id: "01",
-      title: "강남 프리미엄 아파트 입주 청소",
-      location: "서울특별시 강남구",
-      before: "https://picsum.photos/seed/dirty1/1200/800",
-      after: "https://picsum.photos/seed/clean1/1200/800",
-      desc: "오랜 공사 분진과 미세먼지를 완벽하게 제거하여 신축 아파트의 쾌적함을 되찾아드렸습니다."
+      title: "대형 공공기관 정밀 위생 관리",
+      location: "서울특별시",
+      before: publicBefore,
+      after: publicAfter,
+      desc: "공공기관의 엄격한 위생 기준에 맞춰 보이지 않는 세균과 오염원까지 완벽하게 제거하여 쾌적한 업무 환경을 조성했습니다.",
+      tags: ["정밀위생", "공공기관", "살균소독"]
     },
     {
       id: "02",
-      title: "한남동 고급 빌라 대리석 세정",
-      location: "서울특별시 용산구",
-      before: "https://picsum.photos/seed/dirty2/1200/800",
-      after: "https://picsum.photos/seed/clean2/1200/800",
-      desc: "변색된 대리석 표면의 오염원을 특수 세정 솔루션으로 제거하여 본연의 광택을 복원했습니다."
+      title: "대형 호텔 외벽 정밀 세정",
+      location: "인천광역시 중구",
+      before: hotelBefore,
+      after: hotelAfter,
+      desc: "에코삼성의 직영 전문 청소 작업 전문가들이 대거 투입된 작업. 외부 오염으로인해 불투명해진 호텔 외벽과 통유리를 친환경 특수 약품으로 세정하여 프리미엄 호텔 본연의 가치를 되찾아드렸습니다.",
+      tags: ["외벽청소", "호텔케어", "정밀세정"]
     },
     {
       id: "03",
-      title: "성수동 오피스 통유리 외벽 세정",
-      location: "서울특별시 성동구",
-      before: "https://picsum.photos/seed/dirty3/1200/800",
-      after: "https://picsum.photos/seed/clean3/1200/800",
-      desc: "외부 오염으로 불투명해진 통유리창을 전문 장비를 활용해 투명하게 복원하였습니다."
+      title: "업소 주방 기름때 특수 세정 청소",
+      location: "서울특별시 강남구",
+      before: kitchenBefore,
+      after: kitchenAfter,
+      desc: "오랜 기간 축적된 기름때와 찌든때를 에코삼성만의 특수 분해 솔루션으로 완벽하게 제거하여 화재 위험을 방지하고 위생적인 조리 환경을 복원했습니다.",
+      tags: ["주방청소", "기름때제거", "위생복원"]
     }
   ];
-
-
-
-
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -234,7 +307,7 @@ export default function App() {
 
 
   return (
-    <div ref={containerRef} className="relative h-screen w-full bg-black font-sans text-white selection:bg-brand/30 overflow-y-auto snap-y snap-mandatory">
+    <div ref={containerRef} className="relative h-screen w-full bg-black font-sans text-white selection:bg-brand/30 overflow-y-auto snap-y snap-proximity">
       {/* Hero Section */}
       <section className="relative h-screen w-full overflow-hidden snap-start snap-always">
         {/* Section Label */}
@@ -336,7 +409,7 @@ export default function App() {
               {[
                 "하도급없는 100% 직영 시공",
                 "철두철미 여성 전문 드림팀",
-                "원인을 제거하는 청소 시공"
+                "원인부터 완벽히 제거하는 청소 시공"
               ].map((feature, i) => (
                 <motion.div
                   key={feature}
@@ -370,7 +443,7 @@ export default function App() {
 
         <div className="mx-auto max-w-[1600px]">
           <div className="grid grid-cols-12 gap-12">
-            {/* Left: Title & Desc (Ref Style) */}
+            {/* Left: Title & Desc */}
             <div className="col-span-12 lg:col-span-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -378,12 +451,12 @@ export default function App() {
                 viewport={{ once: true }}
               >
                 <h2 className="text-[32px] md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-white">
-                  우리가 주목하는<br />문제는.
+                  청소 업체에 맡겼는데<br />왜 모두가<br />실망하는 걸까요?
                 </h2>
                 <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/40">
-                  에코삼성은 단순한 청소를 넘어,<br />
-                  공간의 본질적인 쾌적함을 방해하는<br />
-                  근본적인 문제들에 집중합니다.
+                  청소 업체들의 구조적인 문제,<br />
+                  결국 피해는 모두<br />
+                  고객의 몫이 되고 있습니다.
                 </p>
                 
                 {/* Visual Timer Indicator */}
@@ -402,65 +475,28 @@ export default function App() {
               </motion.div>
             </div>
 
-            {/* Right: Sliding Cards (Ref Style) */}
+            {/* Right: Interactive 3D Cards */}
             <div className="col-span-12 lg:col-span-8 overflow-hidden">
               <div className="relative h-[500px] md:h-[550px] w-full">
                 <AnimatePresence initial={false}>
                   <motion.div
                     key={currentProblemIndex}
-                    initial={{ x: "100%" }}
-                    animate={{ x: 0 }}
-                    exit={{ x: "-100%" }}
-                    transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
+                    initial={{ x: "100%", opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: "-100%", opacity: 0 }}
+                    transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
                     className="absolute inset-0"
                   >
                     <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-2">
-                       {/* Current Card */}
-                      <div className="group relative h-full overflow-hidden rounded-[4px] bg-[#111] p-6 lg:p-8 transition-all hover:bg-[#161616]">
-                        <div className="relative mb-8 lg:mb-12 flex h-[50%] lg:h-[60%] items-center justify-center">
-                          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
-                          <img 
-                            src={problems[currentProblemIndex].image} 
-                            alt={problems[currentProblemIndex].text}
-                            className="h-full w-full object-cover opacity-40 mix-blend-luminosity grayscale transition-all group-hover:scale-105 group-hover:opacity-60 group-hover:grayscale-0"
-                            referrerPolicy="no-referrer"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="rounded-full bg-black/40 px-6 py-2 text-[12px] lg:text-[14px] font-bold text-white/40 backdrop-blur-md uppercase tracking-[0.2em] border border-white/10">(dummy image)</div>
-                          </div>
-                          <div className="absolute flex h-12 w-12 lg:h-16 lg:w-16 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10">
-                            {problems[currentProblemIndex].icon}
-                          </div>
-                        </div>
+                       {/* Current Interactive Card */}
+                      <InteractiveProblemCard item={problems[currentProblemIndex]} />
 
-                        <div className="mt-auto">
-                          <h3 className="text-[18px] lg:text-[22px] font-bold text-white/90 group-hover:text-brand transition-colors">
-                            {problems[currentProblemIndex].text}
-                          </h3>
-                          <p className="mt-3 lg:mt-4 text-[14px] lg:text-[16px] leading-relaxed text-white/30 group-hover:text-white/60 transition-colors line-clamp-3 lg:line-clamp-none">
-                            {problems[currentProblemIndex].desc}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Next Preview Card (Desktop only) */}
-                      <div className="hidden lg:block relative h-full overflow-hidden rounded-[4px] bg-[#080808] p-8 opacity-30 grayscale">
-                        <div className="relative mb-12 flex h-[60%] items-center justify-center">
-                          <img 
-                            src={problems[(currentProblemIndex + 1) % problems.length].image} 
-                            alt="Next"
-                            className="h-full w-full object-cover opacity-20"
-                            referrerPolicy="no-referrer"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="rounded-full bg-white/5 px-6 py-2 text-[14px] font-bold text-white/20 uppercase tracking-[0.2em] border border-white/5">(dummy image)</div>
-                          </div>
-                        </div>
-                        <div className="mt-auto">
-                          <h3 className="text-[22px] font-bold text-white/20">
-                            {problems[(currentProblemIndex + 1) % problems.length].text}
-                          </h3>
-                        </div>
+                      {/* Next Preview Card (Desktop) */}
+                      <div className="hidden lg:block h-full">
+                        <InteractiveProblemCard 
+                          item={problems[(currentProblemIndex + 1) % problems.length]} 
+                          isPreview 
+                        />
                       </div>
                     </div>
                   </motion.div>
@@ -471,147 +507,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* USP Section: Vertical Expanding Accordion (Scroll Linked) */}
-      <section ref={section3Ref} className="relative z-10 h-[400vh] w-full bg-white text-black">
-        {/* Snap Markers: 4 steps (Start, 01, 02, 03) */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="h-screen snap-start snap-always" />
-          <div className="h-screen snap-start snap-always" />
-          <div className="h-screen snap-start snap-always" />
-          <div className="h-screen snap-start snap-always" />
-        </div>
-
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
-          {/* Background & Content (Shared for all 4 steps via sticky) */}
-          <div className="absolute inset-0 z-0">
-             <div className="flex flex-col lg:flex-row h-full w-full">
-              {usps.map((usp, i) => {
-                const isExpanded = expandedUsp === i;
-                return (
-                  <motion.div
-                    key={i}
-                    initial={false}
-                    animate={{ 
-                      width: typeof window !== 'undefined' && window.innerWidth >= 1024 
-                        ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"))
-                        : "100%",
-                      height: typeof window !== 'undefined' && window.innerWidth < 1024
-                        ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"))
-                        : "100%",
-                      zIndex: isExpanded ? 10 : 1,
-                      opacity: expandedUsp !== null && !isExpanded ? 0 : 1
-                    }}
-                    transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-                    className={`relative overflow-hidden border-b lg:border-r border-black/5 group ${isExpanded ? "flex-grow" : ""}`}
-                  >
-                    <div className="absolute inset-0 z-0">
-                      <motion.img
-                        src={usp.image}
-                        alt={usp.title}
-                        animate={{ 
-                          scale: isExpanded ? 1.02 : 1.1,
-                          opacity: isExpanded ? 1 : 0.4,
-                          filter: isExpanded ? "grayscale(0%)" : "grayscale(100%) brightness(0.8)"
-                        }}
-                        transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
-                        className="h-full w-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                    <div className="absolute inset-0 flex items-start justify-start p-10 pointer-events-none z-10">
-                      <div className="rounded-full bg-white/5 px-6 py-3 text-[14px] font-bold text-white/20 backdrop-blur-xl uppercase tracking-[0.4em] border border-white/10 select-none">(dummy image)</div>
-                    </div>
-                    <div className={`absolute inset-0 transition-opacity duration-1000 ${isExpanded ? "bg-black/20" : "bg-brand/90 group-hover:bg-brand/80"}`} />
-                  </div>
-
-                  {/* Anti-Squish Wrapper for all content */}
-                  <div className="relative z-20 h-full w-full">
-                    {/* Cover Label (Reference Style) - Bottom aligned */}
-                    <AnimatePresence>
-                      {(!isExpanded || expandedUsp === null) && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 20 }}
-                          className="absolute bottom-[4vh] lg:bottom-[8vh] left-[6vw] lg:left-[4vw] right-[6vw] lg:right-[4vw]"
-                        >
-                          <div className="flex flex-col gap-1 lg:gap-2">
-                             <span className="text-[10px] lg:text-[12px] font-bold tracking-[0.4em] text-white/60 uppercase">
-                              {usp.label}
-                            </span>
-                            <h3 className="text-[24px] md:text-[32px] lg:text-[42px] font-bold tracking-tight text-white">
-                              {usp.title}
-                            </h3>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                      {/* Expanded Content (Ref 2 Style) - Fixed width to prevent squishing */}
-                      <AnimatePresence>
-                        {isExpanded && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="flex h-full w-full flex-col items-center justify-center px-[10vw] text-center"
-                          >
-                            <motion.div
-                              initial={{ y: 40, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              transition={{ delay: 0.5, duration: 1, ease: [0.19, 1, 0.22, 1] }}
-                              className="w-full max-w-[1400px]"
-                            >
-                              <span className="text-[12px] lg:text-[14px] font-bold uppercase tracking-[0.5em] text-white/60">
-                                {usp.subtitle}
-                              </span>
-                              <h2 className="mt-4 lg:mt-8 whitespace-nowrap text-[36px] md:text-[56px] lg:text-[84px] font-bold leading-tight tracking-tighter text-white">
-                                {usp.title}
-                              </h2>
-                              
-                              <div className="mt-12 flex justify-center">
-                                <motion.button
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.98 }}
-                                  className="rounded-full border border-white/20 bg-white/10 px-12 py-5 text-[15px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md transition-all hover:bg-white hover:text-black"
-                                >
-                                  Explore Experience
-                                </motion.button>
-                              </div>
-
-                              <div className="mt-8 lg:mt-20 flex flex-col items-center gap-4 lg:gap-6">
-                                <p className="max-w-2xl text-[16px] lg:text-[20px] leading-relaxed text-white/70">
-                                  {usp.desc}
-                                </p>
-                                <div className="mt-4 lg:mt-8 flex items-center gap-3 text-[10px] lg:text-[12px] font-bold text-white/30 uppercase tracking-[0.3em]">
-                                  <span>Scroll down for more</span>
-                                  <div className="h-[1px] w-8 lg:w-12 bg-white/20" />
-                                  <ChevronRight className="h-4 w-4 rotate-90" />
-                                </div>
-                              </div>
-                            </motion.div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Section Label */}
-          <div className="absolute left-[5vw] top-[5vh] z-40">
-            <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 03</span>
-          </div>
-        </div>
-      </section>
 
       {/* Portfolio Section */}
-      <section className="relative z-10 bg-white py-[20vh] px-[5vw] text-black snap-start snap-always">
+      <section className="relative z-10 bg-white py-[20vh] px-[5vw] text-black">
         {/* Section Label */}
         <div className="absolute left-[5vw] top-[5vh] z-30">
-          <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 04</span>
+          <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 03</span>
         </div>
 
         <div className="mx-auto max-w-[1600px]">
@@ -622,8 +523,8 @@ export default function App() {
               viewport={{ once: true }}
             >
               <span className="text-[10px] lg:text-[12px] font-bold uppercase tracking-[0.4em] text-brand">Portfolio</span>
-              <h2 className="mt-4 text-[32px] md:text-[48px] lg:text-[64px] font-bold leading-tight tracking-tight text-black">
-                자신있기에 눈으로.<br />직접 보여드립니다.
+              <h2 className="mt-4 text-[32px] md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-black">
+                에코삼성이 다녀가면<br />어디든 신축이 됩니다
               </h2>
             </motion.div>
             <motion.p 
@@ -647,9 +548,13 @@ export default function App() {
                   <span className="text-[48px] lg:text-[64px] font-black text-black/5 leading-none">{item.id}</span>
                   <h3 className="text-[24px] lg:text-[32px] font-bold mt-[-10px] lg:mt-[-20px] mb-4 lg:mb-6 text-black">{item.title}</h3>
                   <p className="text-[16px] lg:text-[18px] text-black/40 leading-relaxed mb-6 lg:mb-8">{item.desc}</p>
-                  <button className="group flex items-center gap-2 text-[12px] lg:text-[14px] font-bold text-brand uppercase tracking-widest">
-                    View Details <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                  </button>
+                  <div className="flex flex-wrap gap-2">
+                    {item.tags?.map((tag) => (
+                      <span key={tag} className="px-3 py-1 text-[10px] lg:text-[11px] font-bold text-brand border border-brand/20 bg-brand/5 rounded-full uppercase tracking-wider">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
@@ -657,13 +562,152 @@ export default function App() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative z-10 bg-white py-[15vh] px-[5vw] snap-start snap-always">
-        {/* Section Label */}
-        <div className="absolute left-[5vw] top-[5vh] z-30">
-          <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 05</span>
+      {/* USP Section */}
+      <section ref={section3Ref} className="relative z-10 h-[400vh] w-full bg-white text-black">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="h-screen snap-start snap-always" />
+          <div className="h-screen snap-start snap-always" />
+          <div className="h-screen snap-start snap-always" />
+          <div className="h-screen snap-start snap-always" />
         </div>
 
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          <div className="absolute inset-0 z-0">
+             <div className="flex flex-col lg:flex-row h-full w-full">
+              {usps.map((usp, i) => {
+                const isExpanded = expandedUsp === i;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={false}
+                    animate={{ 
+                      width: typeof window !== 'undefined' && window.innerWidth >= 1024 
+                        ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"))
+                        : "100%",
+                      height: typeof window !== 'undefined' && window.innerWidth < 1024
+                        ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"))
+                        : "100%",
+                      zIndex: isExpanded ? 10 : 1,
+                      opacity: expandedUsp !== null && !isExpanded ? 0 : 1
+                    }}
+                    transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+                    onClick={() => {
+                      if (!isExpanded && containerRef.current && section3Ref.current) {
+                        const sectionTop = section3Ref.current.offsetTop;
+                        const viewportHeight = window.innerHeight;
+                        containerRef.current.scrollTo({
+                          top: sectionTop + (i + 1) * viewportHeight,
+                          behavior: "smooth"
+                        });
+                      }
+                    }}
+                    className={`relative overflow-hidden border-b lg:border-r border-black/5 group cursor-pointer ${isExpanded ? "flex-grow" : ""}`}
+                  >
+                    <div className="absolute inset-0 z-0">
+                      {usp.video ? (
+                        <video
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          className={`h-full w-full object-cover transition-all duration-1500 ${isExpanded ? "scale-105 opacity-100" : "scale-110 opacity-40 grayscale"}`}
+                        >
+                          <source src={usp.video} type="video/webm" />
+                        </video>
+                      ) : (
+                        <motion.img
+                          src={usp.image}
+                          alt={usp.title}
+                          animate={{ 
+                            scale: isExpanded ? 1.02 : 1.1,
+                            opacity: isExpanded ? 1 : 0.4,
+                            filter: isExpanded ? "grayscale(0%)" : "grayscale(100%) brightness(0.8)"
+                          }}
+                          transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+                          className="h-full w-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      )}
+                    <div className={`absolute inset-0 transition-opacity duration-1000 ${isExpanded ? "bg-black/20" : "bg-brand/90 group-hover:bg-brand/80"}`} />
+                  </div>
+
+                  <div className="relative z-20 h-full w-full">
+                    <motion.div
+                      animate={{ 
+                        opacity: (expandedUsp === null || isExpanded) ? 1 : 0,
+                        y: isExpanded ? -20 : 0
+                      }}
+                      className="absolute bottom-[6vh] lg:bottom-[8vh] left-[6vw] lg:left-[5vw] z-30"
+                    >
+                      <div className="flex flex-col gap-1 lg:gap-2">
+                         <span className="text-[10px] lg:text-[14px] font-bold tracking-[0.4em] text-white/50 uppercase">
+                          {usp.label}
+                        </span>
+                        <h3 className={`font-bold tracking-tight text-white transition-all duration-1000 ${isExpanded ? "text-[32px] md:text-[48px] lg:text-[64px]" : "text-[24px] md:text-[32px] lg:text-[42px]"}`}>
+                          {usp.title}
+                        </h3>
+                      </div>
+                    </motion.div>
+
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="relative h-full w-full z-20"
+                        >
+                          <motion.div
+                            initial={{ y: -40, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.5, duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+                            className="absolute top-[12vh] lg:top-[12vh] right-[6vw] lg:right-[5vw] text-right max-w-[85%] lg:max-w-3xl"
+                          >
+                            <h2 className="text-[32px] md:text-[56px] lg:text-[84px] font-bold leading-[1.1] tracking-tighter text-white uppercase">
+                              {usp.subtitle}
+                            </h2>
+                            <div className="mt-8 flex justify-end">
+                              <button className="rounded-full border border-white/20 bg-white/10 px-8 py-3 lg:px-12 lg:py-5 text-[12px] lg:text-[15px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md">
+                                Explore Experience
+                              </button>
+                            </div>
+                          </motion.div>
+
+                          <motion.div
+                            initial={{ y: 40, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.7, duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+                            className="absolute bottom-[12vh] lg:bottom-[8vh] right-[6vw] lg:right-[5vw] text-right"
+                          >
+                            <p className="max-w-md text-[14px] lg:text-[20px] leading-relaxed text-white/70 font-medium ml-auto">
+                              {usp.desc}
+                            </p>
+                            <div className="mt-8 lg:mt-12 flex items-center justify-end gap-3 text-[10px] lg:text-[12px] font-bold text-white/30 uppercase tracking-[0.3em]">
+                              <span>Scroll down for more</span>
+                              <div className="h-[1px] w-8 lg:w-12 bg-white/20" />
+                              <ChevronRight className="h-4 w-4 rotate-90" />
+                            </div>
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="absolute left-[5vw] top-[5vh] z-40">
+            <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 04</span>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="relative z-10 bg-white py-[15vh] px-[5vw]">
+        <div className="absolute left-[5vw] top-[5vh] z-30">
+          <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 06</span>
+        </div>
         <div className="mx-auto max-w-[1400px]">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -671,65 +715,33 @@ export default function App() {
             viewport={{ once: true }}
             className="relative overflow-hidden rounded-[24px] lg:rounded-[32px] bg-brand px-6 py-16 text-center lg:py-32 shadow-2xl shadow-brand/20"
           >
-            {/* Background Video with Brand Overlay */}
             <div className="absolute inset-0 z-0 overflow-hidden">
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="h-full w-full object-cover opacity-30 grayscale mix-blend-overlay"
-              >
+              <video autoPlay muted loop playsInline className="h-full w-full object-cover opacity-30 grayscale mix-blend-overlay">
                 <source src="https://hzhedioacvqzxxlkttah.supabase.co/storage/v1/object/public/herolanding-herolanding/0414-EcoSamsung.webm" type="video/webm" />
               </video>
               <div className="absolute inset-0 bg-gradient-to-b from-brand/80 via-brand/60 to-brand/80" />
             </div>
-            
             <div className="relative z-10">
-              <motion.h2 
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                className="text-[24px] md:text-[32px] lg:text-[48px] font-bold leading-tight tracking-tight text-white px-4"
-              >
-                당신의 공간도 다시 태어날 수 있습니다.
-              </motion.h2>
-              <motion.p 
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.1 }}
-                className="mx-auto mt-4 lg:mt-6 max-w-xl text-[14px] leading-relaxed text-white/90 lg:text-[18px] px-6"
-              >
+              <h2 className="text-[32px] md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-white">
+                청소가 필요한 모든 공간,<br />전문가를 만나면 1년 넘도록 깨끗합니다.
+              </h2>
+              <p className="mx-auto mt-4 lg:mt-6 max-w-xl text-[14px] leading-relaxed text-white/90 lg:text-[18px]">
                 지금 바로 에코삼성의 프리미엄 특수 세정 솔루션을 경험해보세요.<br className="hidden lg:block" />
                 전문 상담사가 친절하게 안내해 드립니다.
-              </motion.p>
-              <motion.div 
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="mt-12"
-              >
-                <button 
-                  onClick={() => setIsModalOpen(true)}
-                  className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 lg:px-10 lg:py-5 text-[14px] lg:text-[16px] font-bold text-brand transition-all hover:pr-14 active:scale-95 shadow-xl"
-                >
+              </p>
+              <div className="mt-12">
+                <button onClick={() => setIsModalOpen(true)} className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 lg:px-10 lg:py-5 text-[14px] lg:text-[16px] font-bold text-brand shadow-xl">
                   <span>무료 견적 상담하기</span>
                   <ArrowUpRight className="absolute right-6 h-5 w-5 translate-x-4 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
                 </button>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Footer Section */}
       <Footer />
-
-      <ContactModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-      />
-
-      {/* Subtle Grain Overlay */}
+      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="pointer-events-none fixed inset-0 z-50 opacity-[0.03] mix-blend-overlay">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <filter id="noiseFilter">
@@ -742,26 +754,25 @@ export default function App() {
   );
 }
 
-interface ContactModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
-
+const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const containerVariants = {
-    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
     visible: { 
       opacity: 1, 
       scale: 1, 
       y: 0,
-      transition: {
-        duration: 0.5,
+      transition: { 
+        duration: 0.6, 
         ease: [0.19, 1, 0.22, 1],
         staggerChildren: 0.1
       }
     },
-    exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.3 } }
+    exit: { 
+      opacity: 0, 
+      scale: 0.9, 
+      y: 20,
+      transition: { duration: 0.4 }
+    }
   };
 
   const itemVariants = {
@@ -778,7 +789,7 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
           />
           
           <motion.div
@@ -786,28 +797,26 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative w-full max-w-2xl overflow-hidden rounded-[32px] shadow-2xl flex flex-col lg:flex-row bg-white/10 backdrop-blur-3xl border border-white/20 text-white"
+            className="relative flex w-full max-w-5xl overflow-hidden rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)]"
           >
-
-            <button 
-              onClick={onClose}
-              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full transition-all z-50 bg-white/5 text-white hover:bg-white hover:text-black"
-            >
-              <ArrowUpRight className="h-5 w-5 rotate-45" />
-            </button>
-
-            {/* Left Side: Brand Visual */}
-            <div className="hidden lg:flex w-[260px] flex-col justify-between p-10 border-r bg-white/5 border-white/10">
-              <div>
-                <motion.div variants={itemVariants} className="flex flex-col leading-none">
-                  <span className="text-[20px] font-black tracking-[0.2em] text-white">ECO</span>
-                  <span className="text-[12px] font-light tracking-[0.4em] text-white/40">SAMSUNG</span>
-                </motion.div>
+            {/* Left Side: Visual/Info */}
+            <div className="relative hidden w-[40%] flex-col justify-between bg-brand p-12 lg:flex">
+              <div className="absolute inset-0 z-0 overflow-hidden">
+                <video autoPlay muted loop playsInline className="h-full w-full object-cover opacity-20 grayscale">
+                  <source src="https://hzhedioacvqzxxlkttah.supabase.co/storage/v1/object/public/herolanding-herolanding/0414-EcoSamsung.webm" type="video/webm" />
+                </video>
+                <div className="absolute inset-0 bg-brand/60" />
+              </div>
+              
+              <div className="relative z-10">
+                <div className="flex flex-col leading-none">
+                  <span className="text-[18px] font-black tracking-[0.2em]">ECO</span>
+                  <span className="text-[11px] font-light tracking-[0.4em] opacity-60">SAMSUNG</span>
+                </div>
+                
                 <div className="mt-20">
-                  <motion.div variants={itemVariants} className="mb-4 inline-block rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-white/10 text-white/60">
-                    Premium Solution
-                  </motion.div>
-                  <motion.h3 variants={itemVariants} className="text-[28px] font-bold leading-tight">
+                  <motion.h3 variants={itemVariants} className="text-[32px] font-bold leading-tight">
+                    Pure Space,<br />
                     Transparent<br />
                     Excellence.
                   </motion.h3>
@@ -887,6 +896,14 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
                 </motion.button>
               </form>
             </div>
+            
+            {/* Close Button Mobile */}
+            <button 
+              onClick={onClose}
+              className="absolute right-6 top-6 h-10 w-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 lg:hidden"
+            >
+              <ArrowUpRight className="h-5 w-5 rotate-45" />
+            </button>
           </motion.div>
         </div>
       )}
@@ -957,4 +974,3 @@ const Footer = () => {
     </footer>
   );
 };
-
