@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { ArrowUpRight, MoreHorizontal, ChevronRight, AlertCircle, Wind, Search, Instagram, Facebook, Youtube } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
@@ -283,8 +278,8 @@ export default function App() {
               animate={{ opacity: 1 }}
               className="flex flex-col leading-none"
             >
-              <span className="text-[22px] font-black tracking-[0.2em] text-white">ECO</span>
-              <span className="text-[14px] font-light tracking-[0.4em] text-white/80">SAMSUNG</span>
+              <span className="text-[18px] lg:text-[22px] font-black tracking-[0.2em] text-white">ECO</span>
+              <span className="text-[11px] lg:text-[14px] font-light tracking-[0.4em] text-white/80">SAMSUNG</span>
             </motion.div>
             
             <div className="hidden items-center gap-[2.5vw] lg:flex">
@@ -310,7 +305,7 @@ export default function App() {
             <motion.button
               whileHover={{ scale: 1.05, backgroundColor: "#4D78E0" }}
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 rounded-[6px] bg-brand px-[24px] py-[14px] text-[14px] font-bold shadow-lg shadow-brand/20 transition-all"
+              className="flex items-center gap-2 rounded-[6px] bg-brand px-4 py-3 lg:px-[24px] lg:py-[14px] text-[12px] lg:text-[14px] font-bold shadow-lg shadow-brand/20 transition-all"
             >
               무료 견적 받기
             </motion.button>
@@ -325,11 +320,11 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
             >
-              <h1 className="max-w-[850px] text-[52px] font-bold leading-[1.25] tracking-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+              <h1 className="max-w-[850px] text-[28px] md:text-[42px] lg:text-[52px] font-bold leading-[1.3] lg:leading-[1.25] tracking-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
                 겉만 청소하면 다시 더러워집니다.<br />
                 원인마저 제거하려면 <span className="text-brand">에코삼성</span>입니다.
               </h1>
-              <p className="mt-[28px] max-w-[600px] text-[20px] font-semibold text-white/90 drop-shadow-md">
+              <p className="mt-[20px] lg:mt-[28px] max-w-[600px] text-[15px] md:text-[18px] lg:text-[20px] font-semibold text-white/90 drop-shadow-md leading-relaxed">
                 보이지 않는 오염의 근본 원인을 찾아 해결하는<br />
                 프리미엄 특수 세정 솔루션. 에코삼성입니다.
               </p>
@@ -348,16 +343,16 @@ export default function App() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + i * 0.1 }}
-                  className="group relative border-t-2 border-white/10 pt-[2vh] transition-colors hover:border-brand"
+                  className="group relative border-t border-white/10 pt-[1.5vh] lg:border-t-2 lg:pt-[2vh] transition-colors hover:border-brand"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col gap-1">
-                      <span className="text-[11px] font-bold text-brand opacity-70 tracking-wider">0{i + 1}</span>
-                      <h2 className="text-[20px] font-bold leading-tight text-white/90 drop-shadow-lg group-hover:text-white transition-colors">
+                      <span className="text-[9px] lg:text-[11px] font-bold text-brand opacity-70 tracking-wider">0{i + 1}</span>
+                      <h2 className="text-[16px] lg:text-[20px] font-bold leading-tight text-white/90 drop-shadow-lg group-hover:text-white transition-colors">
                         {feature}
                       </h2>
                     </div>
-                    <div className="mt-1 h-1.5 w-1.5 rounded-full bg-brand opacity-0 transition-all group-hover:opacity-100 group-hover:scale-125" />
+                    <div className="mt-1 h-1 w-1 lg:h-1.5 lg:w-1.5 rounded-full bg-brand opacity-0 transition-all group-hover:opacity-100 group-hover:scale-125" />
                   </div>
                 </motion.div>
               ))}
@@ -382,10 +377,10 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <h2 className="text-[48px] font-bold leading-tight tracking-tight text-white lg:text-[56px]">
+                <h2 className="text-[32px] md:text-[42px] lg:text-[56px] font-bold leading-tight tracking-tight text-white">
                   우리가 주목하는<br />문제는.
                 </h2>
-                <p className="mt-8 text-[18px] leading-relaxed text-white/40">
+                <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/40">
                   에코삼성은 단순한 청소를 넘어,<br />
                   공간의 본질적인 쾌적함을 방해하는<br />
                   근본적인 문제들에 집중합니다.
@@ -409,7 +404,7 @@ export default function App() {
 
             {/* Right: Sliding Cards (Ref Style) */}
             <div className="col-span-12 lg:col-span-8 overflow-hidden">
-              <div className="relative h-[550px] w-full">
+              <div className="relative h-[500px] md:h-[550px] w-full">
                 <AnimatePresence initial={false}>
                   <motion.div
                     key={currentProblemIndex}
@@ -420,9 +415,9 @@ export default function App() {
                     className="absolute inset-0"
                   >
                     <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-2">
-                      {/* Current Card */}
-                      <div className="group relative h-full overflow-hidden rounded-[4px] bg-[#111] p-8 transition-all hover:bg-[#161616]">
-                        <div className="relative mb-12 flex h-[60%] items-center justify-center">
+                       {/* Current Card */}
+                      <div className="group relative h-full overflow-hidden rounded-[4px] bg-[#111] p-6 lg:p-8 transition-all hover:bg-[#161616]">
+                        <div className="relative mb-8 lg:mb-12 flex h-[50%] lg:h-[60%] items-center justify-center">
                           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
                           <img 
                             src={problems[currentProblemIndex].image} 
@@ -431,18 +426,18 @@ export default function App() {
                             referrerPolicy="no-referrer"
                           />
                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="rounded-full bg-black/40 px-6 py-2 text-[14px] font-bold text-white/40 backdrop-blur-md uppercase tracking-[0.2em] border border-white/10">(dummy image)</div>
+                            <div className="rounded-full bg-black/40 px-6 py-2 text-[12px] lg:text-[14px] font-bold text-white/40 backdrop-blur-md uppercase tracking-[0.2em] border border-white/10">(dummy image)</div>
                           </div>
-                          <div className="absolute flex h-16 w-16 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10">
+                          <div className="absolute flex h-12 w-12 lg:h-16 lg:w-16 items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10">
                             {problems[currentProblemIndex].icon}
                           </div>
                         </div>
 
                         <div className="mt-auto">
-                          <h3 className="text-[22px] font-bold text-white/90 group-hover:text-brand transition-colors">
+                          <h3 className="text-[18px] lg:text-[22px] font-bold text-white/90 group-hover:text-brand transition-colors">
                             {problems[currentProblemIndex].text}
                           </h3>
-                          <p className="mt-4 text-[16px] leading-relaxed text-white/30 group-hover:text-white/60 transition-colors">
+                          <p className="mt-3 lg:mt-4 text-[14px] lg:text-[16px] leading-relaxed text-white/30 group-hover:text-white/60 transition-colors line-clamp-3 lg:line-clamp-none">
                             {problems[currentProblemIndex].desc}
                           </p>
                         </div>
@@ -489,7 +484,7 @@ export default function App() {
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           {/* Background & Content (Shared for all 4 steps via sticky) */}
           <div className="absolute inset-0 z-0">
-             <div className="flex h-full w-full">
+             <div className="flex flex-col lg:flex-row h-full w-full">
               {usps.map((usp, i) => {
                 const isExpanded = expandedUsp === i;
                 return (
@@ -497,12 +492,17 @@ export default function App() {
                     key={i}
                     initial={false}
                     animate={{ 
-                      width: isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"),
+                      width: typeof window !== 'undefined' && window.innerWidth >= 1024 
+                        ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"))
+                        : "100%",
+                      height: typeof window !== 'undefined' && window.innerWidth < 1024
+                        ? (isExpanded ? "100%" : (expandedUsp === null ? "33.33%" : "0%"))
+                        : "100%",
                       zIndex: isExpanded ? 10 : 1,
                       opacity: expandedUsp !== null && !isExpanded ? 0 : 1
                     }}
                     transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-                    className={`relative h-full overflow-hidden border-r border-black/5 group ${isExpanded ? "flex-grow" : ""}`}
+                    className={`relative overflow-hidden border-b lg:border-r border-black/5 group ${isExpanded ? "flex-grow" : ""}`}
                   >
                     <div className="absolute inset-0 z-0">
                       <motion.img
@@ -532,13 +532,13 @@ export default function App() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 20 }}
-                          className="absolute bottom-[8vh] left-[4vw] right-[4vw]"
+                          className="absolute bottom-[4vh] lg:bottom-[8vh] left-[6vw] lg:left-[4vw] right-[6vw] lg:right-[4vw]"
                         >
-                          <div className="flex flex-col gap-2">
-                             <span className="text-[12px] font-bold tracking-[0.4em] text-white/60 uppercase">
+                          <div className="flex flex-col gap-1 lg:gap-2">
+                             <span className="text-[10px] lg:text-[12px] font-bold tracking-[0.4em] text-white/60 uppercase">
                               {usp.label}
                             </span>
-                            <h3 className="text-[28px] font-bold tracking-tight text-white lg:text-[42px]">
+                            <h3 className="text-[24px] md:text-[32px] lg:text-[42px] font-bold tracking-tight text-white">
                               {usp.title}
                             </h3>
                           </div>
@@ -562,10 +562,10 @@ export default function App() {
                               transition={{ delay: 0.5, duration: 1, ease: [0.19, 1, 0.22, 1] }}
                               className="w-full max-w-[1400px]"
                             >
-                              <span className="text-[14px] font-bold uppercase tracking-[0.5em] text-white/60">
+                              <span className="text-[12px] lg:text-[14px] font-bold uppercase tracking-[0.5em] text-white/60">
                                 {usp.subtitle}
                               </span>
-                              <h2 className="mt-8 whitespace-nowrap text-[48px] font-bold leading-tight tracking-tighter text-white lg:text-[84px]">
+                              <h2 className="mt-4 lg:mt-8 whitespace-nowrap text-[36px] md:text-[56px] lg:text-[84px] font-bold leading-tight tracking-tighter text-white">
                                 {usp.title}
                               </h2>
                               
@@ -579,13 +579,13 @@ export default function App() {
                                 </motion.button>
                               </div>
 
-                              <div className="mt-20 flex flex-col items-center gap-6">
-                                <p className="max-w-2xl text-[20px] leading-relaxed text-white/70">
+                              <div className="mt-8 lg:mt-20 flex flex-col items-center gap-4 lg:gap-6">
+                                <p className="max-w-2xl text-[16px] lg:text-[20px] leading-relaxed text-white/70">
                                   {usp.desc}
                                 </p>
-                                <div className="mt-8 flex items-center gap-3 text-[12px] font-bold text-white/30 uppercase tracking-[0.3em]">
+                                <div className="mt-4 lg:mt-8 flex items-center gap-3 text-[10px] lg:text-[12px] font-bold text-white/30 uppercase tracking-[0.3em]">
                                   <span>Scroll down for more</span>
-                                  <div className="h-[1px] w-12 bg-white/20" />
+                                  <div className="h-[1px] w-8 lg:w-12 bg-white/20" />
                                   <ChevronRight className="h-4 w-4 rotate-90" />
                                 </div>
                               </div>
@@ -615,14 +615,14 @@ export default function App() {
         </div>
 
         <div className="mx-auto max-w-[1600px]">
-          <div className="mb-24 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+          <div className="mb-16 lg:mb-24 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-[12px] font-bold uppercase tracking-[0.4em] text-brand">Portfolio</span>
-              <h2 className="mt-4 text-[48px] font-bold leading-tight tracking-tight text-black lg:text-[64px]">
+              <span className="text-[10px] lg:text-[12px] font-bold uppercase tracking-[0.4em] text-brand">Portfolio</span>
+              <h2 className="mt-4 text-[32px] md:text-[48px] lg:text-[64px] font-bold leading-tight tracking-tight text-black">
                 자신있기에 눈으로.<br />직접 보여드립니다.
               </h2>
             </motion.div>
@@ -630,24 +630,24 @@ export default function App() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="max-w-md text-[18px] leading-relaxed text-black/40"
+              className="max-w-md text-[15px] lg:text-[18px] leading-relaxed text-black/40"
             >
               수많은 현장에서 검증된 에코삼성만의 특수 세정 솔루션.<br />
               비포 & 애프터 슬라이더를 통해 직접 확인해보세요.
             </motion.p>
           </div>
 
-          <div className="space-y-32">
+          <div className="space-y-20 lg:space-y-32">
             {portfolios.map((item, i) => (
-              <div key={i} className={`flex flex-col lg:flex-row gap-16 items-center ${i % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
+              <div key={i} className={`flex flex-col lg:flex-row gap-8 lg:gap-16 items-center ${i % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
                 <div className="flex-1 w-full shadow-2xl shadow-black/5">
                   <BeforeAfterSlider before={item.before} after={item.after} />
                 </div>
-                <div className="flex-1 max-w-xl">
-                  <span className="text-[64px] font-black text-black/5 leading-none">{item.id}</span>
-                  <h3 className="text-[32px] font-bold mt-[-20px] mb-6 text-black">{item.title}</h3>
-                  <p className="text-[18px] text-black/40 leading-relaxed mb-8">{item.desc}</p>
-                  <button className="group flex items-center gap-2 text-[14px] font-bold text-brand uppercase tracking-widest">
+                <div className="flex-1 max-w-xl w-full">
+                  <span className="text-[48px] lg:text-[64px] font-black text-black/5 leading-none">{item.id}</span>
+                  <h3 className="text-[24px] lg:text-[32px] font-bold mt-[-10px] lg:mt-[-20px] mb-4 lg:mb-6 text-black">{item.title}</h3>
+                  <p className="text-[16px] lg:text-[18px] text-black/40 leading-relaxed mb-6 lg:mb-8">{item.desc}</p>
+                  <button className="group flex items-center gap-2 text-[12px] lg:text-[14px] font-bold text-brand uppercase tracking-widest">
                     View Details <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </button>
                 </div>
@@ -669,7 +669,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[32px] bg-brand px-8 py-24 text-center lg:py-32 shadow-2xl shadow-brand/20"
+            className="relative overflow-hidden rounded-[24px] lg:rounded-[32px] bg-brand px-6 py-16 text-center lg:py-32 shadow-2xl shadow-brand/20"
           >
             {/* Background Video with Brand Overlay */}
             <div className="absolute inset-0 z-0 overflow-hidden">
@@ -689,7 +689,7 @@ export default function App() {
               <motion.h2 
                 initial={{ y: 20, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                className="text-[32px] font-bold leading-tight tracking-tight text-white lg:text-[48px]"
+                className="text-[24px] md:text-[32px] lg:text-[48px] font-bold leading-tight tracking-tight text-white px-4"
               >
                 당신의 공간도 다시 태어날 수 있습니다.
               </motion.h2>
@@ -697,7 +697,7 @@ export default function App() {
                 initial={{ y: 20, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.1 }}
-                className="mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-white/90 lg:text-[18px]"
+                className="mx-auto mt-4 lg:mt-6 max-w-xl text-[14px] leading-relaxed text-white/90 lg:text-[18px] px-6"
               >
                 지금 바로 에코삼성의 프리미엄 특수 세정 솔루션을 경험해보세요.<br className="hidden lg:block" />
                 전문 상담사가 친절하게 안내해 드립니다.
@@ -710,7 +710,7 @@ export default function App() {
               >
                 <button 
                   onClick={() => setIsModalOpen(true)}
-                  className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-10 py-5 text-[16px] font-bold text-brand transition-all hover:pr-14 active:scale-95 shadow-xl"
+                  className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 lg:px-10 lg:py-5 text-[14px] lg:text-[16px] font-bold text-brand transition-all hover:pr-14 active:scale-95 shadow-xl"
                 >
                   <span>무료 견적 상담하기</span>
                   <ArrowUpRight className="absolute right-6 h-5 w-5 translate-x-4 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
@@ -912,12 +912,12 @@ const Footer = () => {
       <div className="bg-black py-20 px-[5vw] text-white border-t border-white/5">
         <div className="mx-auto max-w-[1600px]">
           <div className="flex flex-col lg:flex-row justify-between gap-16">
-            <div className="flex flex-col gap-8 max-w-sm">
+            <div className="flex flex-col gap-6 lg:gap-8 max-w-sm">
               <div className="flex flex-col leading-none">
-                <span className="text-[24px] font-black tracking-[0.2em]">ECO</span>
-                <span className="text-[14px] font-light tracking-[0.4em] text-white/40">SAMSUNG</span>
+                <span className="text-[20px] lg:text-[24px] font-black tracking-[0.2em]">ECO</span>
+                <span className="text-[12px] lg:text-[14px] font-light tracking-[0.4em] text-white/40">SAMSUNG</span>
               </div>
-              <p className="text-[16px] text-white/40 leading-relaxed">
+              <p className="text-[14px] lg:text-[16px] text-white/40 leading-relaxed font-medium">
                 에코삼성은 단순한 청소를 넘어 공간의 본질을 회복합니다. 프리미엄 특수 세정 솔루션으로 당신의 공간에 새로운 가치를 더합니다.
               </p>
               <div className="flex gap-4">
