@@ -50,7 +50,7 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
     >
       {/* After Image (Base) */}
       <div className="relative h-full w-full">
-        <img src={after} alt="After" className="absolute inset-0 h-full w-full object-cover" referrerPolicy="no-referrer" />
+        <img src={after} alt={`에코삼성 프리미엄 청소 시공 후 - 깨끗해진${after.includes('public') ? ' 공공기관' : after.includes('kitchen') ? ' 주방' : ' 건물'} 환경`} className="absolute inset-0 h-full w-full object-cover" referrerPolicy="no-referrer" />
       </div>
       
       {/* Before Image (Overlay) */}
@@ -59,7 +59,7 @@ const BeforeAfterSlider = ({ before, after }: { before: string, after: string })
         style={{ width: `${sliderPos}%` }}
       >
         <div className="relative h-full" style={{ width: `${10000 / Math.max(0.1, sliderPos)}%` }}>
-          <img src={before} alt="Before" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+          <img src={before} alt={`에코삼성 프리미엄 청소 시공 전 - 오염된${before.includes('public') ? ' 공공기관' : before.includes('kitchen') ? ' 주방' : ' 건물'} 환경`} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
         </div>
         <div className="absolute top-4 left-4 rounded-full bg-black/50 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md uppercase tracking-widest">Before</div>
       </div>
@@ -796,7 +796,7 @@ const UspSectionPC = ({ usps, expandedUsp, containerRef, section3Ref }: any) => 
                       <source src={usp.video} type="video/webm" />
                     </video>
                   ) : (
-                    <motion.img src={usp.image} alt={usp.title} animate={{ scale: isExpanded ? 1.02 : 1.1, opacity: isExpanded ? 1 : 0.4, filter: isExpanded ? "grayscale(0%)" : "grayscale(100%) brightness(0.8)" }} transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                    <motion.img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 세정 서비스 핵심 가치`} animate={{ scale: isExpanded ? 1.02 : 1.1, opacity: isExpanded ? 1 : 0.4, filter: isExpanded ? "grayscale(0%)" : "grayscale(100%) brightness(0.8)" }} transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                   )}
                   <div className={`absolute inset-0 transition-opacity duration-1000 ${isExpanded ? "bg-black/20" : "bg-brand/90 group-hover:bg-brand/80"}`} />
                 </div>
@@ -857,7 +857,7 @@ const UspSectionMobile = ({ usps }: any) => {
                   <source src={usp.video} type="video/webm" />
                 </video>
               ) : (
-                <img src={usp.image} alt={usp.title} className={`h-full w-full object-cover transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`} referrerPolicy="no-referrer" />
+                <img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 세정 서비스`} className={`h-full w-full object-cover transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`} referrerPolicy="no-referrer" />
               )}
               <div className={`absolute inset-0 transition-colors duration-700 ${isActive ? "bg-black/60" : "bg-white"}`} />
             </div>
