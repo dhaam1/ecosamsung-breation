@@ -27,6 +27,8 @@ import serviceSpecial from "./assets/images/service-special.png";
 
 // USP Videos
 import directVideo from "./videos/ecosamsung-대구 청소 업체-직영 운영.webm";
+import teamVideo from "./videos/ecosamsung-대구 입주 청소-전문여성드림팀.webm";
+import solutionVideo from "./videos/ecosamsung-대구 사무실 청소-원인 제거 청소.webm";
 
 const BeforeAfterSlider = ({ before, after }: { before: string, after: string }) => {
   const [sliderPos, setSliderPos] = useState(50);
@@ -169,7 +171,13 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
 
 
 export default function App() {
-  const navLinks = ["시공 사례", "서비스 소개", "이용 후기", "견적 문의", "FAQ"];
+  const navLinks = [
+    { label: "문제의식", id: "problem-section" },
+    { label: "시공 사례", id: "portfolio-section" },
+    { label: "서비스 소개", id: "service-section" },
+    { label: "견적 문의", id: "cta-section" }
+  ];
+
   const [videoKey, setVideoKey] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   
@@ -218,7 +226,16 @@ export default function App() {
   }, [problems.length]);
 
   const [expandedUsp, setExpandedUsp] = useState<number | null>(null);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element && containerRef.current) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const section3Ref = useRef<HTMLElement>(null);
+
   const containerRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress: section3Progress } = useScroll({
@@ -236,6 +253,16 @@ export default function App() {
     });
   }, [section3Progress]);
 
+  const { scrollYProgress: globalScroll } = useScroll({
+    container: containerRef
+  });
+
+  const navBg = useTransform(globalScroll, [0, 0.05], ["rgba(0,0,0,0)", "rgba(10,10,10,0.85)"]);
+  const navBorder = useTransform(globalScroll, [0, 0.05], ["rgba(255,255,255,0)", "rgba(255,255,255,0.1)"]);
+  const navHeight = useTransform(globalScroll, [0, 0.05], ["120px", "80px"]);
+  const navBlur = useTransform(globalScroll, [0, 0.05], ["blur(0px)", "blur(16px)"]);
+
+
   const usps = [
     {
       id: "01",
@@ -246,7 +273,8 @@ export default function App() {
       detail: "Reliable",
       value: "100%",
       image: uspDirect,
-      video: directVideo
+      video: directVideo,
+      link: "https://blog.naver.com/az0804_/223960876649"
     },
     {
       id: "02",
@@ -256,7 +284,9 @@ export default function App() {
       desc: "섬세함이 필요한 공간에는 여성 전문가들의 손길이 닿습니다. 철두철미한 디테일과 꼼꼼함으로 보이지 않는 곳까지 프리미엄 케어를 제공합니다.",
       detail: "Meticulous",
       value: "Premium",
-      image: uspTeam
+      image: uspTeam,
+      video: teamVideo,
+      link: "https://blog.naver.com/PostView.naver?blogId=az0804_&logNo=223997039004&categoryNo=0&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=1&from=postList"
     },
     {
       id: "03",
@@ -266,7 +296,9 @@ export default function App() {
       desc: "단순한 오염 제거를 넘어, 오염과 악취의 근본 원인을 분석하고 해결합니다. 에코삼성만의 특수 세정 솔루션으로 깨끗함의 기준을 다시 정의합니다.",
       detail: "Solution",
       value: "Advanced",
-      image: uspSolution
+      image: uspSolution,
+      video: solutionVideo,
+      link: "https://blog.naver.com/az0804_/224000346113"
     }
   ];
 
@@ -308,7 +340,63 @@ export default function App() {
 
 
   return (
-    <div ref={containerRef} className="relative h-screen w-full bg-black font-sans text-white selection:bg-brand/30 overflow-y-auto snap-y snap-proximity">
+    <div ref={containerRef} className="relative h-screen w-full bg-black font-sans text-white selection:bg-brand/30 overflow-y-auto snap-y snap-proximity scroll-smooth">
+      {/* Navigation Bar */}
+      <motion.nav 
+        style={{ 
+          backgroundColor: navBg,
+          borderBottomColor: navBorder,
+          height: navHeight,
+          backdropFilter: navBlur
+        }}
+        className="sticky top-0 z-[100] flex w-full items-center justify-between px-[5vw] transition-colors border-b border-transparent"
+      >
+        <div className="flex items-center gap-[8vw]">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col leading-none"
+          >
+            <span className="text-[18px] lg:text-[22px] font-black tracking-[0.2em] text-white">ECO</span>
+            <span className="text-[11px] lg:text-[14px] font-light tracking-[0.4em] text-white/80">SAMSUNG</span>
+          </motion.div>
+          
+          <div className="hidden items-center gap-[2.5vw] lg:flex">
+            {navLinks.map((link, i) => (
+              <motion.button
+                key={link.id}
+                onClick={() => scrollToSection(link.id)}
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.05 }}
+                className="text-[14px] font-semibold tracking-tight text-white/80 transition-colors hover:text-brand"
+              >
+                {link.label}
+              </motion.button>
+            ))}
+
+          </div>
+        </div>
+
+        <div className="flex items-center gap-[3vw]">
+          <div className="hidden items-center gap-[2vw] lg:flex">
+            <button 
+              onClick={() => setIsPhoneModalOpen(true)} 
+              className="text-[14px] font-semibold text-white/80 hover:text-brand transition-colors"
+            >
+              문의 센터
+            </button>
+          </div>
+          <motion.button
+            whileHover={{ scale: 1.05, backgroundColor: "#4D78E0" }}
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 rounded-[6px] bg-brand px-4 py-3 lg:px-[24px] lg:py-[14px] text-[12px] lg:text-[14px] font-bold shadow-lg shadow-brand/20 transition-all"
+          >
+            무료 견적 받기
+          </motion.button>
+        </div>
+      </motion.nav>
+
       {/* Hero Section */}
       <section className="relative h-screen w-full overflow-hidden snap-start snap-always">
         {/* Section Label */}
@@ -344,50 +432,9 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-[1]" />
         </div>
 
-        {/* Navigation Bar */}
-        <nav className="relative z-20 flex h-[120px] items-center justify-between px-[5vw]">
-          <div className="flex items-center gap-[8vw]">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex flex-col leading-none"
-            >
-              <span className="text-[18px] lg:text-[22px] font-black tracking-[0.2em] text-white">ECO</span>
-              <span className="text-[11px] lg:text-[14px] font-light tracking-[0.4em] text-white/80">SAMSUNG</span>
-            </motion.div>
-            
-            <div className="hidden items-center gap-[2.5vw] lg:flex">
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link}
-                  href="#"
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05 }}
-                  className="text-[14px] font-semibold tracking-tight text-white/80 transition-colors hover:text-brand"
-                >
-                  {link}
-                </motion.a>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-[3vw]">
-            <div className="hidden items-center gap-[2vw] lg:flex">
-              <a href="#" className="text-[14px] font-semibold text-white/80 hover:text-brand">상담센터</a>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05, backgroundColor: "#4D78E0" }}
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 rounded-[6px] bg-brand px-4 py-3 lg:px-[24px] lg:py-[14px] text-[12px] lg:text-[14px] font-bold shadow-lg shadow-brand/20 transition-all"
-            >
-              무료 견적 받기
-            </motion.button>
-          </div>
-        </nav>
-
         {/* Main Grid Layout */}
-        <main className="relative z-10 grid h-[calc(100vh-120px)] grid-cols-12 px-[5vw] pb-[5vh]">
+        <main className="relative z-10 grid h-full grid-cols-12 px-[5vw] pb-[5vh]">
+
           <div className="col-span-12 flex flex-col justify-end pb-[12vh] lg:col-span-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -436,7 +483,8 @@ export default function App() {
       </section>
 
       {/* Problem Statement Section */}
-      <section className="relative z-10 bg-black py-[20vh] px-[5vw] snap-start snap-always">
+      <section id="problem-section" className="relative z-10 bg-black py-[20vh] px-[5vw] snap-start snap-always">
+
         {/* Section Label */}
         <div className="absolute left-[5vw] top-[5vh] z-30">
           <span className="text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">Section 02</span>
@@ -510,7 +558,8 @@ export default function App() {
 
 
       {/* Portfolio Section */}
-      <section className="relative z-10 bg-white py-[20vh] px-[5vw] text-black">
+      <section id="portfolio-section" className="relative z-10 bg-white py-[20vh] px-[5vw] text-black">
+
         {/* Section Label */}
         <div className="absolute left-[5vw] top-[5vh] z-30">
           <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 03</span>
@@ -564,7 +613,8 @@ export default function App() {
       </section>
 
       {/* USP Section */}
-      <section ref={section3Ref} className="relative z-10 h-[400vh] w-full bg-white text-black">
+      <section id="service-section" ref={section3Ref} className="relative z-10 h-[400vh] w-full bg-white text-black">
+
         <div className="absolute inset-0 pointer-events-none">
           <div className="h-screen snap-start snap-always" />
           <div className="h-screen snap-start snap-always" />
@@ -669,7 +719,7 @@ export default function App() {
                             </h2>
                             <div className="mt-8 flex justify-end">
                               <a 
-                                href="https://blog.naver.com/az0804_/223960876649"
+                                href={usp.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="rounded-full border border-white/20 bg-white/10 px-8 py-3 lg:px-12 lg:py-5 text-[12px] lg:text-[15px] font-bold text-white backdrop-blur-md transition-all hover:bg-white/20"
@@ -710,7 +760,8 @@ export default function App() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 bg-white py-[15vh] px-[5vw]">
+      <section id="cta-section" className="relative z-10 bg-white py-[15vh] px-[5vw]">
+
         <div className="absolute left-[5vw] top-[5vh] z-30">
           <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 06</span>
         </div>
@@ -746,7 +797,11 @@ export default function App() {
         </div>
       </section>
 
-      <Footer />
+      <Footer 
+        navLinks={navLinks} 
+        scrollToSection={scrollToSection} 
+        onOpenModal={() => setIsModalOpen(true)} 
+      />
       <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="pointer-events-none fixed inset-0 z-50 opacity-[0.03] mix-blend-overlay">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -978,7 +1033,7 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                         transition={{ delay: 0.5 }}
                         className="text-[28px] lg:text-[36px] font-bold tracking-tight text-white mb-4"
                       >
-                        문의남겨주셔서 감사합니다.
+                        문의 남겨주셔서 감사합니다.
                       </motion.h2>
                       
                       <motion.p 
@@ -1024,17 +1079,33 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
   );
 };
 
-const Footer = () => {
+const Footer = ({ 
+  navLinks, 
+  scrollToSection, 
+  onOpenModal 
+}: { 
+  navLinks: { label: string, id: string }[], 
+  scrollToSection: (id: string) => void,
+  onOpenModal: () => void
+}) => {
   const socialLinks = [
     { icon: <Instagram className="h-5 w-5" />, label: "Instagram" },
     { icon: <Facebook className="h-5 w-5" />, label: "Facebook" },
     { icon: <Youtube className="h-5 w-5" />, label: "Youtube" },
   ];
 
-  const footerLinks = [
-    { title: "Service", links: ["입주 청소", "특수 세정", "상가 청소", "오피스 케어"] },
-    { title: "Company", links: ["회사 소개", "인증 현황", "공지사항", "인재 채용"] },
-    { title: "Support", links: ["고객 센터", "1:1 문의", "견적 요청", "FAQ"] },
+  const footerGroups = [
+    { 
+      title: "Menu", 
+      links: navLinks.map(link => ({ label: link.label, onClick: () => scrollToSection(link.id) })) 
+    },
+    { 
+      title: "Contact", 
+      links: [
+        { label: "문의 센터", href: "tel:010-6273-7511" },
+        { label: "무료 견적 받기", onClick: onOpenModal }
+      ] 
+    },
   ];
 
   return (
@@ -1059,14 +1130,28 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-24">
-              {footerLinks.map((group, i) => (
+            <div className="grid grid-cols-2 gap-12 lg:gap-24">
+              {footerGroups.map((group, i) => (
                 <div key={i} className="flex flex-col gap-6">
                   <h4 className="text-[14px] font-bold uppercase tracking-widest text-white/20">{group.title}</h4>
                   <ul className="flex flex-col gap-3">
                     {group.links.map((link, j) => (
                       <li key={j}>
-                        <a href="#" className="text-[15px] text-white/50 hover:text-brand transition-colors">{link}</a>
+                        {link.href ? (
+                          <a 
+                            href={link.href}
+                            className="text-[15px] text-white/50 hover:text-brand transition-colors"
+                          >
+                            {link.label}
+                          </a>
+                        ) : (
+                          <button 
+                            onClick={link.onClick}
+                            className="text-left text-[15px] text-white/50 hover:text-brand transition-colors"
+                          >
+                            {link.label}
+                          </button>
+                        )}
                       </li>
                     ))}
                   </ul>
