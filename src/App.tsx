@@ -250,8 +250,8 @@ export default function App() {
     },
     {
       id: "02",
-      title: "여성 전문 드림팀",
-      subtitle: "Expert Female Team",
+      title: "섬세한 여전문가 드림팀",
+      subtitle: "EXPERT TEAM",
       label: "OUR TEAM",
       desc: "섬세함이 필요한 공간에는 여성 전문가들의 손길이 닿습니다. 철두철미한 디테일과 꼼꼼함으로 보이지 않는 곳까지 프리미엄 케어를 제공합니다.",
       detail: "Meticulous",
@@ -409,7 +409,7 @@ export default function App() {
             <div className="flex flex-col gap-[4vh]">
               {[
                 "하도급없는 100% 직영 시공",
-                "철두철미 여성 전문 드림팀",
+                "철두철미 섬세한 여전문가 드림팀",
                 "원인부터 완벽히 제거하는 청소 시공"
               ].map((feature, i) => (
                 <motion.div
@@ -978,8 +978,7 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                         transition={{ delay: 0.5 }}
                         className="text-[28px] lg:text-[36px] font-bold tracking-tight text-white mb-4"
                       >
-                        당신의 공간이 곧<br />
-                        <span className="text-brand">새로운 가치</span>를 찾게 됩니다
+                        문의남겨주셔서 감사합니다.
                       </motion.h2>
                       
                       <motion.p 
@@ -988,8 +987,8 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
                         transition={{ delay: 0.6 }}
                         className="text-[14px] lg:text-[16px] text-white/40 leading-relaxed max-w-[280px] lg:max-w-md mb-12"
                       >
-                        에코삼성의 정밀 진단 시스템으로 확인 후<br />
-                        전문 상담사가 24시간 이내에 직접 안내해 드리겠습니다.
+                        전문 상담사가 24시간 이내에<br />
+                        문의 도와드리겠습니다.
                       </motion.p>
                       
                       <motion.button 
