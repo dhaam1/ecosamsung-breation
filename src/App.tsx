@@ -21,10 +21,7 @@ import problemMold from "./assets/images/problem-mold.png";
 import uspDirect from "./assets/images/usp-direct.png";
 import uspTeam from "./assets/images/usp-team.png";
 import uspSolution from "./assets/images/usp-solution.png";
-import serviceRegular from "./assets/images/service-regular.png";
-import serviceSanitary from "./assets/images/service-sanitary.png";
-import serviceMovein from "./assets/images/service-movein.png";
-import serviceSpecial from "./assets/images/service-special.png";
+
 
 // USP Videos
 import directVideo from "./videos/ecosamsung-대구 청소 업체-직영 운영.webm";
@@ -421,7 +418,7 @@ export default function App() {
       title: "근본 원인 제거",
       subtitle: "친환경 특수 약품 청소로\n원인 제거. 불안 제거.",
       label: "OUR TECHNOLOGY",
-      desc: "단순하게 오염 제거에서 그치지 않습니다. 에코삼성만의 친환경 특수 약품으로 세정 솔루션을 진행해 오염, 악취의 원인을 친환경적으로 완벽히 제거합니다.",
+      desc: "단순하게 오염 제거에서 그치지 않습니다. 에코삼성만의 친환경 특수 약품으로 청소 솔루션을 진행해 오염, 악취의 원인을 친환경적으로 완벽히 제거합니다.",
       detail: "Solution",
       value: "Advanced",
       image: uspSolution,
@@ -442,16 +439,16 @@ export default function App() {
     },
     {
       id: "02",
-      title: "대형 호텔 외벽 정밀 세정",
+      title: "대형 호텔 외벽 정밀 청소",
       location: "인천광역시 중구",
       before: hotelBefore,
       after: hotelAfter,
-      desc: "에코삼성의 직영 전문 청소 작업 전문가들이 대거 투입된 작업. 외부 오염으로 인해 불투명해진 호텔 외벽과 통유리를 친환경 특수 약품으로 세정하여 프리미엄 호텔 본연의 가치를 되찾아드렸습니다.",
-      tags: ["외벽청소", "호텔케어", "정밀세정"]
+      desc: "에코삼성의 직영 전문 청소 작업 전문가들이 대거 투입된 작업. 외부 오염으로 인해 불투명해진 호텔 외벽과 통유리를 친환경 특수 약품으로 청소하여 프리미엄 호텔 본연의 가치를 되찾아드렸습니다.",
+      tags: ["외벽청소", "호텔케어", "정밀청소"]
     },
     {
       id: "03",
-      title: "업소 찌든때, 기름때 특수 세정 청소",
+      title: "업소 찌든때, 기름때 특수 청소",
       location: "서울특별시 강남구",
       before: kitchenBefore,
       after: kitchenAfter,
@@ -484,7 +481,7 @@ export default function App() {
     }
     
     // Update document title based on view
-    const baseTitle = "에코삼성 | 프리미엄 특수 세정 솔루션";
+    const baseTitle = "에코삼성 | 프리미엄 특수 청소 솔루션";
     if (view === 'privacy') {
       document.title = `개인정보 처리방침 | ${baseTitle}`;
     } else if (view === 'terms') {
@@ -603,9 +600,7 @@ export default function App() {
 // Sub-components to keep App cleaner
 const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
   <section className="relative h-[100svh] w-full overflow-hidden snap-start snap-always">
-    <div className="absolute left-[5vw] top-[5vh] z-30">
-      <span className="text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">Section 01</span>
-    </div>
+
     <div className="absolute inset-0 z-0">
       <AnimatePresence mode="wait">
         <motion.div
@@ -626,7 +621,7 @@ const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
     </div>
     <main className="relative z-10 grid h-full grid-cols-12 px-[5vw] pb-[8vh] lg:pb-[12vh]">
         <div className="col-span-12 flex flex-col justify-end lg:col-span-7 pt-[10svh] lg:pt-0">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}>
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] as any }}>
           {/* Mobile Title */}
           <h1 className="block md:hidden max-w-[850px] text-[24px] sm:text-[28px] font-bold leading-[1.3] tracking-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
             겉만 청소하면 다시 더러워집니다.<br />
@@ -639,7 +634,7 @@ const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
             원인마저 제거하려면 <span className="text-brand">에코삼성</span>입니다.
           </h1>
           <p className="hidden md:block mt-[20px] lg:mt-[28px] max-w-[600px] text-[15px] md:text-[18px] lg:text-[20px] font-semibold text-white/90 drop-shadow-md leading-relaxed">
-            프리미엄 특수 세정 솔루션. 에코삼성입니다.
+            프리미엄 특수 청소 솔루션. 에코삼성입니다.
           </p>
         </motion.div>
       </div>
@@ -664,9 +659,7 @@ const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
 
 const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
   <section id="problem-section" className="relative z-10 bg-black py-[20vh] px-[5vw] snap-start snap-always">
-    <div className="absolute left-[5vw] top-[5vh] z-30">
-      <span className="text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">Section 02</span>
-    </div>
+
     <div className="mx-auto max-w-[1472px] w-full">
       <div className="flex flex-col lg:grid lg:grid-cols-12 gap-12 w-full">
         <div className="w-full lg:col-span-4">
@@ -688,7 +681,7 @@ const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
         <div className="w-full lg:col-span-8 overflow-hidden relative">
           <div className="relative h-[360px] sm:h-[500px] md:h-[550px] w-full overflow-hidden">
             <AnimatePresence initial={false}>
-              <motion.div key={currentProblemIndex} initial={{ x: "100%", opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: "-100%", opacity: 0 }} transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }} className="absolute inset-0 w-full left-0 right-0">
+              <motion.div key={currentProblemIndex} initial={{ x: "100%", opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: "-100%", opacity: 0 }} transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] as any }} className="absolute inset-0 w-full left-0 right-0">
                 <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-2">
                   <InteractiveProblemCard item={problems[currentProblemIndex]} />
                   <div className="hidden lg:block h-full">
@@ -706,9 +699,7 @@ const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
 
 const PortfolioSection = ({ portfolios }: any) => (
   <section id="portfolio-section" className="relative z-10 bg-white py-[20vh] px-[5vw] text-black">
-    <div className="absolute left-[5vw] top-[5vh] z-30">
-      <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 03</span>
-    </div>
+
     <div className="mx-auto max-w-[1472px]">
       <div className="mb-16 lg:mb-24 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-8">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
@@ -716,7 +707,7 @@ const PortfolioSection = ({ portfolios }: any) => (
           <h2 className="mt-4 text-[32px] md:text-[42px] lg:text-[48px] xl:text-[56px] font-bold leading-tight tracking-tight text-black break-keep">에코삼성이 다녀가면<br />어디든 신축이 됩니다</h2>
         </motion.div>
         <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="max-w-md text-[15px] lg:text-[18px] leading-relaxed text-black/40 break-keep">
-          수많은 현장에서 검증된 에코삼성만의 특수 세정 솔루션.<br />비포 & 애프터 슬라이더를 통해 직접 확인해보세요.
+          수많은 현장에서 검증된 에코삼성만의 특수 청소 솔루션.<br />비포 & 애프터 슬라이더를 통해 직접 확인해보세요.
         </motion.p>
       </div>
       <div className="space-y-20 lg:space-y-32">
@@ -752,9 +743,7 @@ const UspSection = ({ section3Ref, usps, expandedUsp, containerRef }: any) => (
       <UspSectionMobile usps={usps} />
     </div>
     
-    <div className="absolute left-[5vw] top-[5vh] z-40">
-      <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 04</span>
-    </div>
+
   </section>
 );
 
@@ -780,7 +769,7 @@ const UspSectionPC = ({ usps, expandedUsp, containerRef, section3Ref }: any) => 
                   zIndex: isExpanded ? 10 : 1,
                   opacity: expandedUsp !== null && !isExpanded ? 0 : 1
                 }}
-                transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+                transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] as any }}
                 onClick={() => {
                   if (!isExpanded && containerRef.current && section3Ref.current) {
                     const sectionTop = section3Ref.current.offsetTop;
@@ -796,7 +785,7 @@ const UspSectionPC = ({ usps, expandedUsp, containerRef, section3Ref }: any) => 
                       <source src={usp.video} type="video/webm" />
                     </video>
                   ) : (
-                    <motion.img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 세정 서비스 핵심 가치`} animate={{ scale: isExpanded ? 1.02 : 1.1, opacity: isExpanded ? 1 : 0.4, filter: isExpanded ? "grayscale(0%)" : "grayscale(100%) brightness(0.8)" }} transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                    <motion.img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 청소 서비스 핵심 가치`} animate={{ scale: isExpanded ? 1.02 : 1.1, opacity: isExpanded ? 1 : 0.4, filter: isExpanded ? "grayscale(0%)" : "grayscale(100%) brightness(0.8)" }} transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] as any }} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                   )}
                   <div className={`absolute inset-0 transition-opacity duration-1000 ${isExpanded ? "bg-black/20" : "bg-brand/90 group-hover:bg-brand/80"}`} />
                 </div>
@@ -810,13 +799,13 @@ const UspSectionPC = ({ usps, expandedUsp, containerRef, section3Ref }: any) => 
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative h-full w-full z-20">
-                        <motion.div initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5, duration: 1.2, ease: [0.19, 1, 0.22, 1] }} className="absolute top-[12vh] right-[5vw] text-right max-w-3xl">
+                        <motion.div initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5, duration: 1.2, ease: [0.19, 1, 0.22, 1] as any }} className="absolute top-[12vh] right-[5vw] text-right max-w-3xl">
                           <h2 className="text-[42px] lg:text-[72px] font-bold leading-[1.1] tracking-tighter text-white whitespace-pre-line break-keep">{usp.subtitle}</h2>
                           <div className="mt-8 flex justify-end">
                             <a href={usp.link} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 bg-white/10 px-12 py-5 text-[15px] font-bold text-white backdrop-blur-md transition-all hover:bg-white/20">에코삼성 자세히 알아보기</a>
                           </div>
                         </motion.div>
-                        <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 1.2, ease: [0.19, 1, 0.22, 1] }} className="absolute bottom-[8vh] right-[5vw] text-right">
+                        <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 1.2, ease: [0.19, 1, 0.22, 1] as any }} className="absolute bottom-[8vh] right-[5vw] text-right">
                           <p className="max-w-md text-[20px] leading-relaxed text-white/70 font-medium ml-auto break-keep">{usp.desc}</p>
                           <div className="mt-12 flex items-center justify-end gap-3 text-[12px] font-bold text-white/30 uppercase tracking-[0.3em]">
                             <span>Scroll down for more</span>
@@ -857,7 +846,7 @@ const UspSectionMobile = ({ usps }: any) => {
                   <source src={usp.video} type="video/webm" />
                 </video>
               ) : (
-                <img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 세정 서비스`} className={`h-full w-full object-cover transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`} referrerPolicy="no-referrer" />
+                <img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 청소 서비스`} className={`h-full w-full object-cover transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`} referrerPolicy="no-referrer" />
               )}
               <div className={`absolute inset-0 transition-colors duration-700 ${isActive ? "bg-black/60" : "bg-white"}`} />
             </div>
@@ -877,7 +866,7 @@ const UspSectionMobile = ({ usps }: any) => {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+                    transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] as any }}
                     className="overflow-hidden w-full"
                   >
                     <div className="pt-8 pb-4">
@@ -902,9 +891,7 @@ const UspSectionMobile = ({ usps }: any) => {
 
 const CtaSection = ({ onOpenModal }: any) => (
   <section id="cta-section" className="relative z-10 bg-white py-[15vh] px-[5vw]">
-    <div className="absolute left-[5vw] top-[5vh] z-30">
-      <span className="text-[10px] font-bold tracking-[0.2em] text-black/20 uppercase">Section 06</span>
-    </div>
+
     <div className="mx-auto max-w-[1472px]">
       <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative overflow-hidden rounded-[24px] lg:rounded-[32px] bg-brand px-6 py-16 text-center lg:py-32 shadow-2xl shadow-brand/20">
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -925,7 +912,7 @@ const CtaSection = ({ onOpenModal }: any) => (
             청소가 필요한 모든 공간,<br />전문가를 만나면 1년 넘도록 깨끗합니다.
           </h2>
           <p className="mx-auto mt-4 lg:mt-6 max-w-xl text-[14px] leading-relaxed text-white/90 lg:text-[18px]">
-            지금 바로 에코삼성의 프리미엄 특수 세정 솔루션을 경험해보세요.<br className="hidden lg:block" />전문 상담사가 친절하게 안내해 드립니다.
+            지금 바로 에코삼성의 프리미엄 특수 청소 솔루션을 경험해보세요.<br className="hidden lg:block" />전문 상담사가 친절하게 안내해 드립니다.
           </p>
           <div className="mt-12">
             <button onClick={onOpenModal} className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 lg:px-10 lg:py-5 text-[14px] lg:text-[16px] font-bold text-brand shadow-xl">
@@ -1119,7 +1106,7 @@ const TermsOfServiceView = ({ setView }: { setView: (v: 'home') => void }) => (
         <span className="text-brand/40 font-mono text-[16px]">03.</span>
         서비스 범위 및 전문가 배치
       </h2>
-      <p>회사는 이용자에게 다음과 같은 전문 세정 솔루션을 제공합니다.</p>
+      <p>회사는 이용자에게 다음과 같은 전문 청소 솔루션을 제공합니다.</p>
       <div className="mt-8 space-y-4">
         {[
           { t: "특수 시공 시스템", d: "외벽, 대리석, 카페트 등 고난도 기술이 필요한 전문 특수 시공 서비스" },
@@ -1203,7 +1190,7 @@ const NotFoundView = ({ setView }: { setView: (v: 'home') => void }) => {
        <motion.div 
          initial={{ opacity: 0, scale: 0.8 }}
          animate={{ opacity: 1, scale: 1 }}
-         transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+         transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] as any }}
          className="relative z-10 text-center"
        >
          <div className="relative inline-block mb-12">
@@ -1258,7 +1245,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
       y: 0,
       transition: { 
         duration: 0.6, 
-        ease: [0.19, 1, 0.22, 1],
+        ease: [0.19, 1, 0.22, 1] as any as any,
         staggerChildren: 0.1
       }
     },
@@ -1341,7 +1328,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] as any }}
                   >
                     <div className="mb-8">
                       <motion.span variants={itemVariants} className="text-[12px] font-bold uppercase tracking-[0.4em] text-white/60">Inquiry</motion.span>
@@ -1389,7 +1376,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
                             <option value="" className="text-black">유형을 선택해주세요</option>
                             <option value="입주청소" className="text-black">입주 청소</option>
                             <option value="이사청소" className="text-black">이사 청소</option>
-                            <option value="특수청소" className="text-black">특수 세정 (대리석/외벽 등)</option>
+                            <option value="특수청소" className="text-black">특수 청소 (대리석/외벽 등)</option>
                             <option value="정기관리" className="text-black">정기 관리 서비스</option>
                           </select>
                           <div className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2">
@@ -1543,7 +1530,7 @@ const PhoneModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       y: 0,
       transition: { 
         duration: 0.6, 
-        ease: [0.19, 1, 0.22, 1],
+        ease: [0.19, 1, 0.22, 1] as any,
         staggerChildren: 0.1
       }
     },
@@ -1665,7 +1652,7 @@ const Footer = ({
     },
   ];
 
-  const footerGroups = [
+  const footerGroups: { title: string, links: { label: string, onClick?: () => void, href?: string }[] }[] = [
     { 
       title: "Menu", 
       links: navLinks.map(link => ({ label: link.label, onClick: () => scrollToSection(link.id) })) 
@@ -1692,7 +1679,7 @@ const Footer = ({
               <p className="text-[14px] lg:text-[16px] text-white/40 leading-relaxed font-medium">
                 겉만 청소하면 다시 더러워집니다.<br />
                 원인마저 제거하려면 에코삼성입니다.<br />
-                프리미엄 특수 세정 솔루션. 에코삼성입니다.
+                프리미엄 특수 청소 솔루션. 에코삼성입니다.
               </p>
               <div className="flex gap-4">
                 {socialLinks.map((s, i) => (
