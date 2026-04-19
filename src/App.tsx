@@ -14,15 +14,6 @@ import kitchenAfter from "./pictures/ecosamsung-주방 청소-after.png";
 import hotelBefore from "./pictures/ecosamsung-호텔 외벽 청소-before.png";
 import hotelAfter from "./pictures/ecosamsung-호텔 외벽 청소-after.png";
 
-// AI Generated Assets (Internalized)
-import problemSubcontracting from "./assets/images/problem-subcontracting.png";
-import problemSurface from "./assets/images/problem-surface.png";
-import problemMold from "./assets/images/problem-mold.png";
-import uspDirect from "./assets/images/usp-direct.png";
-import uspTeam from "./assets/images/usp-team.png";
-import uspSolution from "./assets/images/usp-solution.png";
-
-
 // USP Videos
 import directVideo from "./videos/ecosamsung-대구 청소 업체-직영 운영.webm";
 import teamVideo from "./videos/ecosamsung-대구 입주 청소-전문여성드림팀.webm";
@@ -305,22 +296,19 @@ export default function App() {
       id: "01",
       icon: <AlertCircle className="h-6 w-6" />,
       text: "광고한 거랑 청소 상태가 너무 달라요",
-      desc: "의뢰를 받은 것은 다시 하청으로 내리는 고객과의 '신뢰'를 저버리는 하도급 중심 구조. 청소 품질 편차가 일정할 수 밖에 없습니다.",
-      image: problemSubcontracting
+      desc: "의뢰를 받은 것은 다시 하청으로 내리는 고객과의 '신뢰'를 저버리는 하도급 중심 구조. 청소 품질 편차가 일정할 수 밖에 없습니다."
     },
     {
       id: "02",
       icon: <Search className="h-6 w-6" />,
       text: "청소해도 며칠 지나면 다시 더러워져요",
-      desc: "표면만 닦아내는 청소는 한계가 있습니다. 오염의 근본적인 원인을 해결하지 않으면 오염은 반드시 재발합니다.",
-      image: problemSurface
+      desc: "표면만 닦아내는 청소는 한계가 있습니다. 오염의 근본적인 원인을 해결하지 않으면 오염은 반드시 재발합니다."
     },
     {
       id: "03",
       icon: <Wind className="h-6 w-6" />,
       text: "업체 이용 후에도 냄새는 똑같이 나는 것 같아요",
-      desc: "냄새는 보이지 않는 틈새와 깊숙한 곳에 박힌 오염원에서 시작됩니다. 그저 겉만 청소하는 것은 아무 소용 없습니다.",
-      image: problemMold
+      desc: "냄새는 보이지 않는 틈새와 깊숙한 곳에 박힌 오염원에서 시작됩니다. 그저 겉만 청소하는 것은 아무 소용 없습니다."
     }
   ];
 
@@ -397,7 +385,6 @@ export default function App() {
       desc: "에코삼성은 하도급 없이 모든 공정을 본사가 직접 관리하는 100% 직영 시스템을 고집합니다. 이는 균일한 최상급 품질과 책임 있는 A/S를 보장하는 유일한 길입니다.",
       detail: "Reliable",
       value: "100%",
-      image: uspDirect,
       video: directVideo,
       link: "https://blog.naver.com/az0804_/223960876649"
     },
@@ -409,7 +396,6 @@ export default function App() {
       desc: "섬세함이 필요한 공간에는 여성 전문가들의 손길이 닿습니다. 철두철미한 디테일과 꼼꼼함으로 보이지 않는 곳까지 프리미엄 케어를 제공합니다.",
       detail: "Meticulous",
       value: "Premium",
-      image: uspTeam,
       video: teamVideo,
       link: "https://blog.naver.com/PostView.naver?blogId=az0804_&logNo=223997039004&categoryNo=0&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=1&from=postList"
     },
@@ -421,7 +407,6 @@ export default function App() {
       desc: "단순하게 오염 제거에서 그치지 않습니다. 에코삼성만의 친환경 특수 약품으로 청소 솔루션을 진행해 오염, 악취의 원인을 친환경적으로 완벽히 제거합니다.",
       detail: "Solution",
       value: "Advanced",
-      image: uspSolution,
       video: solutionVideo,
       link: "https://blog.naver.com/az0804_/224000346113"
     }
@@ -540,17 +525,10 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-[3vw]">
-          <div className="hidden items-center gap-[2vw] lg:flex">
-            <button 
-              onClick={handlePhoneClick} 
-              className="text-[14px] font-semibold text-white/80 hover:text-brand transition-colors"
-            >
-              문의 센터
-            </button>
-          </div>
+
           <motion.button
             whileHover={{ scale: 1.05, backgroundColor: "#4D78E0" }}
-            onClick={() => setIsModalOpen(true)}
+            onClick={handlePhoneClick}
             className="flex items-center gap-2 rounded-[6px] bg-brand px-4 py-3 lg:px-[24px] lg:py-[14px] text-[12px] lg:text-[14px] font-bold shadow-lg shadow-brand/20 transition-all"
           >
             무료 견적 받기
@@ -566,7 +544,7 @@ export default function App() {
           <ProblemSection progress={progress} currentProblemIndex={currentProblemIndex} problems={problems} />
           <PortfolioSection portfolios={portfolios} />
           <UspSection section3Ref={section3Ref} usps={usps} expandedUsp={expandedUsp} containerRef={containerRef} />
-          <CtaSection onOpenModal={() => setIsModalOpen(true)} />
+          <CtaSection onOpenModal={handlePhoneClick} />
         </>
       ) : view === 'privacy' ? (
         <PrivacyPolicyView setView={setView} />
@@ -579,8 +557,8 @@ export default function App() {
       <Footer 
         navLinks={navLinks} 
         scrollToSection={scrollToSection} 
-        onOpenModal={() => setIsModalOpen(true)} 
-        onPhoneClick={handlePhoneClick}
+          onOpenModal={handlePhoneClick} 
+          onPhoneClick={handlePhoneClick}
         setView={setView}
       />
       <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} setView={setView} />
@@ -785,7 +763,7 @@ const UspSectionPC = ({ usps, expandedUsp, containerRef, section3Ref }: any) => 
                       <source src={usp.video} type="video/webm" />
                     </video>
                   ) : (
-                    <motion.img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 청소 서비스 핵심 가치`} animate={{ scale: isExpanded ? 1.02 : 1.1, opacity: isExpanded ? 1 : 0.4, filter: isExpanded ? "grayscale(0%)" : "grayscale(100%) brightness(0.8)" }} transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] as any }} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                    <div className="h-full w-full bg-[#111]" />
                   )}
                   <div className={`absolute inset-0 transition-opacity duration-1000 ${isExpanded ? "bg-black/20" : "bg-brand/90 group-hover:bg-brand/80"}`} />
                 </div>
@@ -846,7 +824,7 @@ const UspSectionMobile = ({ usps }: any) => {
                   <source src={usp.video} type="video/webm" />
                 </video>
               ) : (
-                <img src={usp.image} alt={`에코삼성 ${usp.title} - 프리미엄 청소 서비스`} className={`h-full w-full object-cover transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`} referrerPolicy="no-referrer" />
+                <div className={`h-full w-full bg-[#111] transition-all duration-1000 ${isActive ? "opacity-40" : "opacity-0"}`} />
               )}
               <div className={`absolute inset-0 transition-colors duration-700 ${isActive ? "bg-black/60" : "bg-white"}`} />
             </div>
@@ -1660,8 +1638,7 @@ const Footer = ({
     { 
       title: "Contact", 
       links: [
-        { label: "문의 센터", onClick: onPhoneClick },
-        { label: "무료 견적 받기", onClick: onOpenModal }
+        { label: "무료 견적 받기", onClick: onPhoneClick }
       ] 
     },
   ];
