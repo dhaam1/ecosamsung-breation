@@ -1264,28 +1264,31 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
   }, [isOpen]);
 
   const containerVariants = {
-    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    hidden: { opacity: 0, scale: 0.98, y: 10 },
     visible: { 
       opacity: 1, 
       scale: 1, 
       y: 0,
       transition: { 
-        duration: 0.6, 
-        ease: [0.19, 1, 0.22, 1] as any as any,
-        staggerChildren: 0.1
+        duration: 0.4, 
+        ease: [0.19, 1, 0.22, 1] as any
       }
     },
     exit: { 
       opacity: 0, 
-      scale: 0.9, 
-      y: 20,
-      transition: { duration: 0.4 }
+      scale: 0.98, 
+      y: 10,
+      transition: { duration: 0.3 }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -1379,8 +1382,8 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
             </div>
 
             {/* Right Side Contents */}
-            <div className="flex-1 p-6 sm:p-10 lg:p-14 relative min-h-0 lg:min-h-[550px] flex flex-col justify-center overflow-y-auto lg:overflow-hidden bg-[#0A0A0A]">
-              <AnimatePresence>
+            <div className="flex-1 p-6 sm:p-10 lg:p-14 relative min-h-[500px] lg:min-h-[550px] flex flex-col justify-center bg-[#0A0A0A]">
+              <AnimatePresence mode="wait">
                 {!isSubmitted ? (
                   <motion.div
                     key="form"
@@ -1535,11 +1538,11 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
                 ) : (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-6 sm:p-10 lg:p-14 bg-[#0A0A0A]"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="relative z-10 flex flex-col items-center justify-center text-center p-0 lg:p-0 bg-[#0A0A0A] w-full h-full"
                   >
                     {/* Interior Background Effects for Success State */}
                     <div className="absolute inset-0 z-0 opacity-10">
@@ -1639,28 +1642,31 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
 
 const PhoneModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const containerVariants = {
-    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    hidden: { opacity: 0, scale: 0.98, y: 10 },
     visible: { 
       opacity: 1, 
       scale: 1, 
       y: 0,
       transition: { 
-        duration: 0.6, 
-        ease: [0.19, 1, 0.22, 1] as any,
-        staggerChildren: 0.1
+        duration: 0.4, 
+        ease: [0.19, 1, 0.22, 1] as any
       }
     },
     exit: { 
       opacity: 0, 
-      scale: 0.9, 
-      y: 20,
-      transition: { duration: 0.4 }
+      scale: 0.98, 
+      y: 10,
+      transition: { duration: 0.3 }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
   };
 
   const handleCopy = () => {
