@@ -4,7 +4,7 @@
  */
 
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, useMotionValueEvent } from "motion/react";
-import { ArrowUpRight, MoreHorizontal, ChevronRight, AlertCircle, Wind, Search, MapPin, CheckCircle2, Sparkles, Building2, LayoutPanelLeft } from "lucide-react";
+import { ArrowUpRight, MoreHorizontal, ChevronRight, AlertCircle, Wind, Search, MapPin, CheckCircle2, Sparkles, Building2, LayoutPanelLeft, PhoneCall } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import publicBefore from "./pictures/ecosamsung-공공기관 청소-before.png";
@@ -275,6 +275,55 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
   );
 };
 
+// Floating Contact Button Component
+const FloatingContactButton = ({ onOpenModal }: { onOpenModal: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.5, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ delay: 1, duration: 1, ease: [0.19, 1, 0.22, 1] as any }}
+      className="fixed bottom-6 right-6 z-[90] lg:bottom-10 lg:right-10 flex flex-col items-end gap-3"
+    >
+      {/* Label for PC */}
+      <motion.div 
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.5 }}
+        className="hidden lg:block bg-black/80 backdrop-blur-xl px-5 py-2.5 rounded-2xl border border-white/10 shadow-2xl"
+      >
+        <span className="text-[13px] font-bold text-white tracking-widest flex items-center gap-2">
+          <div className="h-1.5 w-1.5 rounded-full bg-brand animate-pulse" />
+          실시간 무료 견적 상담
+        </span>
+      </motion.div>
+
+      <motion.button
+        whileHover={{ scale: 1.1, rotate: 5 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={onOpenModal}
+        className="group relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand via-brand to-[#3b5eb3] text-white shadow-[0_20px_50px_rgba(77,120,224,0.4)] transition-all lg:h-20 lg:w-20"
+      >
+        {/* Glow effect */}
+        <div className="absolute inset-0 rounded-2xl bg-brand/20 blur-xl group-hover:bg-brand/40 transition-all" />
+        
+        {/* Main Content */}
+        <div className="relative z-10 flex flex-col items-center">
+            <motion.div
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <PhoneCall className="h-7 w-7 lg:h-9 lg:w-9" />
+            </motion.div>
+            <span className="mt-1 hidden text-[11px] font-black text-white/90 uppercase tracking-tighter lg:block">CALL</span>
+        </div>
+        
+        {/* Shine Refraction Surface */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/10 to-transparent opacity-50" />
+      </motion.button>
+    </motion.div>
+  );
+};
+
 
 export default function App() {
   const [view, setView] = useState<'home' | 'privacy' | 'terms' | '404'>('home');
@@ -448,11 +497,8 @@ export default function App() {
   const handlePhoneClick = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 1024;
-    if (isMobile) {
-      window.location.href = "tel:010-6273-7511";
-    } else {
-      setIsPhoneModalOpen(true);
-    }
+    // Always open ContactModal on all platforms, as requested by user
+    setIsModalOpen(true);
   };
 
   const handleVideoEnd = () => {
@@ -563,6 +609,7 @@ export default function App() {
       />
       <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} setView={setView} />
       <PhoneModal isOpen={isPhoneModalOpen} onClose={() => setIsPhoneModalOpen(false)} />
+      <FloatingContactButton onOpenModal={() => setIsPhoneModalOpen(true)} />
       <div className="pointer-events-none fixed inset-0 z-50 opacity-[0.03] mix-blend-overlay">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <filter id="noiseFilter">
@@ -645,7 +692,7 @@ const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
             <h2 className="text-[32px] md:text-[42px] lg:text-[48px] xl:text-[56px] font-bold leading-tight tracking-tight text-white break-keep">
               청소 업체에 맡겼는데<br />왜 모두가<br />실망하는 걸까요?
             </h2>
-            <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/40 break-keep">
+            <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/70 break-keep">
               청소 업체들의 구조적인 문제,<br />결국 피해는 모두<br />고객의 몫이 되고 있습니다.
             </p>
             <div className="mt-12 flex items-center gap-4">
@@ -1205,6 +1252,7 @@ const NotFoundView = ({ setView }: { setView: (v: 'home') => void }) => {
 
 const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: () => void, setView: (v: 'privacy' | 'terms') => void }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
   // Reset states when modal opens
@@ -1240,25 +1288,58 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
     visible: { opacity: 1, y: 0 }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!agreed) {
       alert("개인정보 수집 및 이용에 동의해주세요.");
       return;
     }
-    setIsSubmitted(true);
+    
+    setIsSubmitting(true);
+    
+    try {
+      const formData = new FormData(e.currentTarget);
+      
+      // 앱스크립트 규격에 맞게 데이터 구성
+      const params = new URLSearchParams();
+      params.append('name', formData.get('name') as string);
+      params.append('email', formData.get('email') as string);
+      params.append('phone', formData.get('phone') as string);
+      params.append('location', formData.get('location') as string);
+      params.append('serviceType', formData.get('serviceType') as string);
+      params.append('size', formData.get('size') as string);
+      params.append('requestDate', formData.get('requestDate') as string);
+      params.append('notes', formData.get('notes') as string);
+
+      // 백그라운드에서 전송 시작 (await 제거)
+      fetch('https://script.google.com/macros/s/AKfycbwC4nED-c-9y8lmWkz0PfTDGO-RoRFNRsMv20Xbwwqz2PdJm1jhGRTT-rEfFABfCh4/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: params,
+      });
+
+      // 0.8초 동안 "전송 중..." 상태를 유지하여 신뢰감 부여 후 완료 처리
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("상담 신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 lg:p-8">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 lg:p-8 overflow-y-auto py-10 sm:py-20 lg:py-10">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md"
           />
           
           <motion.div
@@ -1266,7 +1347,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative flex w-full max-w-5xl overflow-hidden rounded-[24px] lg:rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)]"
+            className="relative flex w-full max-w-5xl overflow-hidden rounded-[24px] lg:rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] my-auto max-h-none sm:max-h-none"
           >
             {/* Left Side: Visual/Info */}
             <div className="relative hidden w-[40%] flex-col justify-between bg-brand p-12 lg:flex">
@@ -1298,8 +1379,8 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
             </div>
 
             {/* Right Side Contents */}
-            <div className="flex-1 p-6 sm:p-10 lg:p-14 relative min-h-[500px] sm:min-h-[550px] flex flex-col justify-center">
-              <AnimatePresence mode="wait">
+            <div className="flex-1 p-6 sm:p-10 lg:p-14 relative min-h-0 lg:min-h-[550px] flex flex-col justify-center overflow-y-auto lg:overflow-hidden bg-[#0A0A0A]">
+              <AnimatePresence>
                 {!isSubmitted ? (
                   <motion.div
                     key="form"
@@ -1319,48 +1400,98 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
                         <motion.div variants={itemVariants} className="space-y-2">
                           <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">이름</label>
                           <input 
+                            name="name"
                             type="text" 
                             required 
                             placeholder="성함" 
-                            className="w-full rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                            className="w-full rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
                           />
                         </motion.div>
                         <motion.div variants={itemVariants} className="space-y-2">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">연락처</label>
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">이메일 주소</label>
                           <input 
-                            type="tel" 
+                            name="email"
+                            type="email" 
                             required 
-                            placeholder="010-0000-0000" 
-                            className="w-full rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                            placeholder="example@email.com" 
+                            className="w-full rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
                           />
                         </motion.div>
                       </div>
+
+                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <motion.div variants={itemVariants} className="space-y-2">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">연락처</label>
+                          <input 
+                            name="phone"
+                            type="tel" 
+                            required 
+                            placeholder="010-0000-0000" 
+                            className="w-full rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          />
+                        </motion.div>
+                        <motion.div variants={itemVariants} className="space-y-2">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">서비스 유형</label>
+                          <div className="relative">
+                            <select 
+                              name="serviceType"
+                              required 
+                              className="w-full appearance-none rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                            >
+                              <option value="" className="text-black">유형 선택</option>
+                              <option value="입주청소" className="text-black">입주 청소</option>
+                              <option value="이사청소" className="text-black">이사 청소</option>
+                              <option value="특수청소" className="text-black">특수 청소 (대리석/외벽 등)</option>
+                              <option value="정기관리" className="text-black">정기 관리 서비스</option>
+                            </select>
+                            <div className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2">
+                              <ChevronRight className="h-4 w-4 rotate-90 opacity-40" />
+                            </div>
+                          </div>
+                        </motion.div>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <motion.div variants={itemVariants} className="space-y-2">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">지역</label>
+                          <input 
+                            name="location"
+                            type="text" 
+                            required 
+                            placeholder="예: 서울시 강남구" 
+                            className="w-full rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          />
+                        </motion.div>
+                        <motion.div variants={itemVariants} className="space-y-2">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">평수</label>
+                          <input 
+                            name="size"
+                            type="text" 
+                            required 
+                            placeholder="예: 34평" 
+                            className="w-full rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          />
+                        </motion.div>
+                      </div>
+
                       <motion.div variants={itemVariants} className="space-y-2">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">지역</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">작업 희망일</label>
                         <input 
-                          type="text" 
+                          name="requestDate"
+                          type="date" 
                           required 
-                          placeholder="예: 서울시 강남구" 
-                          className="w-full rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
+                          className="w-full rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10 [color-scheme:dark]"
                         />
                       </motion.div>
+
                       <motion.div variants={itemVariants} className="space-y-2">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">서비스 유형</label>
-                        <div className="relative">
-                          <select 
-                            required 
-                            className="w-full appearance-none rounded-xl border px-5 py-3.5 text-[15px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10"
-                          >
-                            <option value="" className="text-black">유형을 선택해주세요</option>
-                            <option value="입주청소" className="text-black">입주 청소</option>
-                            <option value="이사청소" className="text-black">이사 청소</option>
-                            <option value="특수청소" className="text-black">특수 청소 (대리석/외벽 등)</option>
-                            <option value="정기관리" className="text-black">정기 관리 서비스</option>
-                          </select>
-                          <div className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2">
-                            <ChevronRight className="h-4 w-4 rotate-90 opacity-40" />
-                          </div>
-                        </div>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-white/80">특이사항 (선택)</label>
+                        <textarea 
+                          name="notes"
+                          placeholder="상담 시 참고할 내용을 적어주세요." 
+                          rows={2}
+                          className="w-full rounded-xl border px-5 py-3 text-[14px] outline-none transition-all focus:border-brand bg-white/5 border-white/10 text-white focus:bg-white/10 resize-none"
+                        />
                       </motion.div>
 
                       {/* Agreement Checkbox */}
@@ -1386,22 +1517,29 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
 
                       <motion.button 
                         variants={itemVariants}
-                        whileHover={agreed ? { scale: 1.02 } : {}}
-                        whileTap={agreed ? { scale: 0.98 } : {}}
+                        whileHover={(agreed && !isSubmitting) ? { scale: 1.02 } : {}}
+                        whileTap={(agreed && !isSubmitting) ? { scale: 0.98 } : {}}
                         type="submit" 
-                        className={`mt-4 w-full rounded-2xl py-5 text-[17.5px] font-bold text-white shadow-xl transition-all ${agreed ? 'bg-brand shadow-brand/20 hover:bg-brand/90 opacity-100' : 'bg-white/5 border border-white/5 opacity-40 cursor-not-allowed'}`}
+                        disabled={!agreed || isSubmitting}
+                        className={`mt-4 w-full rounded-2xl py-5 text-[17.5px] font-bold text-white shadow-xl transition-all ${agreed && !isSubmitting ? 'bg-brand shadow-brand/20 hover:bg-brand/90 opacity-100' : 'bg-white/5 border border-white/5 opacity-40 cursor-not-allowed'}`}
                       >
-                        상담 신청하기
+                        {isSubmitting ? (
+                          <div className="flex items-center justify-center gap-3">
+                            <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>전송 중...</span>
+                          </div>
+                        ) : "상담 신청하기"}
                       </motion.button>
                     </form>
                   </motion.div>
                 ) : (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    className="relative flex h-full w-full flex-col items-center justify-center text-center overflow-hidden"
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-6 sm:p-10 lg:p-14 bg-[#0A0A0A]"
                   >
                     {/* Interior Background Effects for Success State */}
                     <div className="absolute inset-0 z-0 opacity-10">
