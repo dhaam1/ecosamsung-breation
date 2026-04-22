@@ -7,17 +7,18 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSp
 import { ArrowUpRight, MoreHorizontal, ChevronRight, AlertCircle, Wind, Search, MapPin, CheckCircle2, Sparkles, Building2, LayoutPanelLeft, PhoneCall } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import publicBefore from "./pictures/ecosamsung-공공기관 청소-before.png";
-import publicAfter from "./pictures/ecosamsung-공공기관 청소-after.png";
-import kitchenBefore from "./pictures/ecosamsung-주방 청소-before.png";
-import kitchenAfter from "./pictures/ecosamsung-주방 청소-after.png";
-import hotelBefore from "./pictures/ecosamsung-호텔 외벽 청소-before.png";
-import hotelAfter from "./pictures/ecosamsung-호텔 외벽 청소-after.png";
+import publicBefore from "./pictures/ecosamsung-public-before.png";
+import publicAfter from "./pictures/ecosamsung-public-after.png";
+import kitchenBefore from "./pictures/ecosamsung-kitchen-before.png";
+import kitchenAfter from "./pictures/ecosamsung-kitchen-after.png";
+import hotelBefore from "./pictures/ecosamsung-hotel-before.png";
+import hotelAfter from "./pictures/ecosamsung-hotel-after.png";
+import breationLogo from "./pictures/ecosamsung_breation-logo.png";
 
 // USP Videos
-import directVideo from "./videos/ecosamsung-대구 청소 업체-직영 운영.webm";
-import teamVideo from "./videos/ecosamsung-대구 입주 청소-전문여성드림팀.webm";
-import solutionVideo from "./videos/ecosamsung-대구 사무실 청소-원인 제거 청소.webm";
+import directVideo from "./videos/ecosamsung-direct.webm";
+import teamVideo from "./videos/ecosamsung-team.webm";
+import solutionVideo from "./videos/ecosamsung-solution.webm";
 
 const BeforeAfterSlider = ({ before, after }: { before: string, after: string }) => {
   const [sliderPos, setSliderPos] = useState(50);
@@ -173,9 +174,9 @@ const GsapVisual = ({ type }: { type: string }) => {
       )}
       {type === "02" && (
         <div className="relative flex flex-col items-center justify-center w-full h-full">
-           <div className="relative h-3 w-48 bg-white/10 rounded-full mb-4 overflow-hidden">
-              <div className="absolute inset-0 bg-brand/20" />
-           </div>
+            <div className="relative h-3 w-48 bg-white/10 rounded-full mb-4 overflow-hidden">
+              <div className="absolute inset-0 bg-white/20" />
+            </div>
            <div className="relative flex flex-wrap justify-center gap-4 w-40 h-20">
              {[...Array(12)].map((_, i) => (
                <div key={i} className="mold-dot h-3 w-3 rounded-full bg-red-500" />
@@ -240,7 +241,7 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
         rotateY: isPreview ? 0 : (typeof window !== 'undefined' && window.innerWidth < 1024 ? 0 : rotateY),
         transformStyle: "preserve-3d",
       }}
-      className={`group relative h-full w-full overflow-hidden rounded-[16px] bg-[#0d0d0d] border border-white/5 p-4 sm:p-6 lg:p-10 transition-all hover:bg-[#111] ${isPreview ? "opacity-30 grayscale blur-[2px]" : ""} touch-none md:touch-auto`}
+      className={`group relative h-full w-full overflow-hidden rounded-[16px] bg-white/10 backdrop-blur-xl border border-white/20 p-4 sm:p-6 lg:p-10 transition-all hover:bg-white/20 ${isPreview ? "opacity-30 grayscale blur-[2px]" : ""} touch-none md:touch-auto`}
     >
       <div 
         style={{ transform: "translateZ(60px)" }}
@@ -251,10 +252,10 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
 
       <div style={{ transform: "translateZ(40px)" }} className="mt-auto relative z-10">
         <div className="flex items-center gap-4 mb-4">
-           <span className="text-[11px] font-bold text-brand tracking-[0.4em] uppercase">Issue 0{item.id}</span>
-           <div className="h-[1px] w-10 bg-brand/20" />
+           <span className="text-[11px] font-bold text-white tracking-[0.4em] uppercase">Issue 0{item.id}</span>
+           <div className="h-[1px] w-10 bg-white/30" />
         </div>
-        <h3 className="text-[20px] lg:text-[24px] font-bold text-white group-hover:text-brand transition-colors leading-tight">
+        <h3 className="text-[20px] lg:text-[24px] font-bold text-white group-hover:text-white transition-colors leading-tight">
           {item.text}
         </h3>
         {!isPreview && (
@@ -268,7 +269,7 @@ const InteractiveProblemCard = ({ item, isPreview = false }: { item: any, isPrev
       <motion.div
           className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{
-              background: `radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(77,120,224,0.1) 0%, transparent 70%)`,
+              background: `radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.15) 0%, transparent 70%)`,
           }}
       />
     </motion.div>
@@ -683,7 +684,7 @@ const HeroSection = ({ videoKey, handleVideoEnd, videoRef }: any) => (
 );
 
 const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
-  <section id="problem-section" className="relative z-10 bg-black py-[20vh] px-[5vw] snap-start snap-always">
+  <section id="problem-section" className="relative z-10 bg-brand py-[20vh] px-[5vw] snap-start snap-always">
 
     <div className="mx-auto max-w-[1472px] w-full">
       <div className="flex flex-col lg:grid lg:grid-cols-12 gap-12 w-full">
@@ -692,14 +693,14 @@ const ProblemSection = ({ progress, currentProblemIndex, problems }: any) => (
             <h2 className="text-[32px] md:text-[42px] lg:text-[48px] xl:text-[56px] font-bold leading-tight tracking-tight text-white break-keep">
               청소 업체에 맡겼는데<br />왜 모두가<br />실망하는 걸까요?
             </h2>
-            <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/70 break-keep">
+            <p className="mt-6 lg:mt-8 text-[15px] lg:text-[18px] leading-relaxed text-white/90 break-keep">
               청소 업체들의 구조적인 문제,<br />결국 피해는 모두<br />고객의 몫이 되고 있습니다.
             </p>
             <div className="mt-12 flex items-center gap-4">
-              <div className="h-[2px] w-32 bg-white/10 overflow-hidden">
-                <motion.div className="h-full bg-brand" animate={{ width: `${progress}%` }} transition={{ duration: 0.05, ease: "linear" }} />
+              <div className="h-[2px] w-32 bg-white/20 overflow-hidden">
+                <motion.div className="h-full bg-white" animate={{ width: `${progress}%` }} transition={{ duration: 0.05, ease: "linear" }} />
               </div>
-              <span className="text-[12px] font-mono text-white/40 tracking-widest">0{currentProblemIndex + 1} / 0{problems.length}</span>
+              <span className="text-[12px] font-mono text-white/60 tracking-widest">0{currentProblemIndex + 1} / 0{problems.length}</span>
             </div>
           </motion.div>
         </div>
@@ -1350,7 +1351,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative flex w-full max-w-5xl overflow-hidden rounded-[24px] lg:rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] my-auto max-h-none sm:max-h-none"
+            className="relative flex w-full max-w-5xl min-h-[580px] lg:min-h-0 overflow-hidden rounded-[24px] lg:rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] my-auto"
           >
             {/* Left Side: Visual/Info */}
             <div className="relative hidden w-[40%] flex-col justify-between bg-brand p-12 lg:flex">
@@ -1382,7 +1383,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
             </div>
 
             {/* Right Side Contents */}
-            <div className="flex-1 p-6 sm:p-10 lg:p-14 relative min-h-[500px] lg:min-h-[550px] flex flex-col justify-center bg-[#0A0A0A]">
+            <div className="flex-1 p-6 sm:p-10 lg:p-14 relative min-h-[580px] lg:min-h-[550px] flex flex-col justify-center bg-[#0A0A0A]">
               <AnimatePresence mode="wait">
                 {!isSubmitted ? (
                   <motion.div
@@ -1444,6 +1445,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
                               <option value="" className="text-black">유형 선택</option>
                               <option value="입주청소" className="text-black">입주 청소</option>
                               <option value="이사청소" className="text-black">이사 청소</option>
+                              <option value="방역, 소독업" className="text-black">방역, 소독업</option>
                               <option value="특수청소" className="text-black">특수 청소 (대리석/외벽 등)</option>
                               <option value="정기관리" className="text-black">정기 관리 서비스</option>
                             </select>
@@ -1542,7 +1544,7 @@ const ContactModal = ({ isOpen, onClose, setView }: { isOpen: boolean, onClose: 
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="relative z-10 flex flex-col items-center justify-center text-center p-0 lg:p-0 bg-[#0A0A0A] w-full h-full"
+                    className="relative z-10 flex-1 flex flex-col items-center justify-center text-center p-6 sm:p-10 lg:p-0 bg-[#0A0A0A] w-full min-h-[500px]"
                   >
                     {/* Interior Background Effects for Success State */}
                     <div className="absolute inset-0 z-0 opacity-10">
